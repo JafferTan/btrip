@@ -18,7 +18,7 @@ public class CorpController {
     @Autowired
     private CorpService corpService;
 
-    @PostMapping("/getDeptDetailJson")
+    @PostMapping("/registerCorpJson")
     @ResponseBody
     public BtripResult<Boolean> registerCorp(String corpName, String phoneNumber, String userName) {
 
