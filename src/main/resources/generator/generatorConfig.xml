@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <!-- 数据库驱动 -->
+    <classPathEntry location="/Users/jaffer/.m2/repository/mysql/mysql-connector-java/8.0.28/mysql-connector-java-8.0.28.jar"/>
+    <context id="context1" targetRuntime="MyBatis3">
+        <!-- 禁用mybatis插件自动生成的注释 -->
+        <commentGenerator>
+            <property name="suppressDate" value="true" />
+            <property name="suppressAllComments" value="true" />
+        </commentGenerator>
+
+        <!-- oracel数据库连接串配置 -->
+        <jdbcConnection
+                connectionURL="jdbc:mysql://120.25.149.154"
+                driverClass="com.mysql.jdbc.Driver"
+                password="7e56e9223649f9b3"
+                userId="root" />
+
+        <!-- 类型转换器 -->
+        <javaTypeResolver type="org.mybatis.generator.internal.types.JavaTypeResolverDefaultImpl">
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+        <!-- java实体类配置 生成位置-->
+        <javaModelGenerator
+                targetPackage="com.jaffer.btrip.beans.entity"
+                targetProject="../btrip/src/main/java" >
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+        <!-- sqlMap映射xml配置 生成位置-->
+
+        <sqlMapGenerator
+                targetPackage="sqlmap.btrip"
+                targetProject="../btrip/src/main/resources" />
+        <!-- mybatis接口类配置 生成位置-->
+
+        <javaClientGenerator
+                targetPackage="com.jaffer.btrip.mapper"
+                targetProject="../btrip/src/main/java"
+                type="XMLMAPPER" />
+
+        <!-- table name 可以添加多个table标签-->
+        <table tableName="btrip_corp_admin"  domainObjectName="CorpAdminPO" enableCountByExample="true"
+               enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" >
+            <generatedKey column="id" identity="true" sqlStatement="Mysql"/>
+        </table>
+    </context>
+</generatorConfiguration>
