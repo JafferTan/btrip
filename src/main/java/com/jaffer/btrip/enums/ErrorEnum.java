@@ -26,11 +26,11 @@ public enum ErrorEnum {
      * 错误码
      */
     @Getter
-    Integer errorCode;
+    private Integer errorCode;
 
     /**
      * 错误信息
      */
     @Getter
-    String errorMsg;
+    private String errorMsg;
 }

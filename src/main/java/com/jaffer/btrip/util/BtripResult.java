@@ -4,11 +4,12 @@ import lombok.Data;
 
 @Data
 public class BtripResult<T>{
-    Boolean success;
 
-    String errorMsg;
+    private Boolean success;
 
-    Integer resultCode;
+    private String errorMsg;
 
-    T module;
+    private Integer resultCode;
+
+    private T module;
 }
