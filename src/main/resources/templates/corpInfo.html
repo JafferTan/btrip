@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh">
+    <meta charset="utf-8">
+    <title>注册企业</title>
+</head>
+<body>
+    <form action="/registerCorpJson" method="post">
+        <p>企业名字: <input type="text" name="corpName"></p>
+        <p>手机号: <input type="text" name="phoneNumber"></p>
+        <p>用户名: <input type="text" name="userName"></p>
+        <button type="submit">注册企业</button>
+    </form>
+
+    <br>
+    <form action="/getCorpDetailByCorpIdJson" method="post">
+        <p>企业id: <input type="text" name="corpId"></p>
+        <button type="submit">查询企业信息</button>
+    </form>
+
+    <br>
+    <form action="/deleteCorpByCorpIdJson" method="post">
+        <p>企业id: <input type="text" name="corpId"></p>
+        <button type="submit">删除企业</button>
+    </form>
+
+
+</body>
+</html>

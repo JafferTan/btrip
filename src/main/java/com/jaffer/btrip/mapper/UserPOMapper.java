@@ -3,8 +3,10 @@ package com.jaffer.btrip.mapper;
 import com.jaffer.btrip.beans.entity.UserPO;
 import com.jaffer.btrip.beans.entity.UserPOExample;
 import java.util.List;
-import org.apache.ibatis.annotations.Param;
 
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+@Mapper
 public interface UserPOMapper {
     long countByExample(UserPOExample example);
 

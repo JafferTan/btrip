@@ -2,9 +2,11 @@ package com.jaffer.btrip.manager;
 
 import com.jaffer.btrip.beans.entity.CorpAdminPO;
 import com.jaffer.btrip.beans.entity.CorpPO;
+import com.jaffer.btrip.beans.entity.CorpPOExample;
 import com.jaffer.btrip.beans.entity.UserPO;
 import com.jaffer.btrip.enums.BtripSpecialDeptEnum;
 import com.jaffer.btrip.enums.CorpAdminEnum;
+import com.jaffer.btrip.enums.RowStatusEnum;
 import com.jaffer.btrip.exception.BizException;
 import com.jaffer.btrip.helper.CorpAdminServiceHelper;
 import com.jaffer.btrip.helper.CorpServiceHelper;
@@ -15,8 +17,11 @@ import com.jaffer.btrip.mapper.UserPOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.util.List;
+import java.util.Objects;
 
 @Component
 public class CorpManager {
@@ -69,4 +74,29 @@ public class CorpManager {
         return true;
     }
 
+    public CorpPO getCorpDetailByCorpId(String corpId) {
+        CorpPOExample corpPOExample = new CorpPOExample();
+        CorpPOExample.Criteria criteria = corpPOExample.createCriteria().andCorpIdEqualTo(corpId);
+        List<CorpPO> corpPOS = corpPOMapper.selectByExample(corpPOExample);
+        if (CollectionUtils.isEmpty(corpPOS)) {
+            return null;
+        }
+        return corpPOS.get(0);
+    }
+
+    @Transactional
+    public Boolean deleteCorpByCorpId(String corpId) {
+        CorpPO corpDetailByCorpId = this.getCorpDetailByCorpId(corpId);
+
+        if (Objects.isNull(corpDetailByCorpId)) {
+            throw new BizException("该企业不存在");
+        }
+
+        corpDetailByCorpId.setStatus(RowStatusEnum.DELETE.getStatus());
+        int i = corpPOMapper.updateByPrimaryKeySelective(corpDetailByCorpId);
+        if (i <= 0) {
+            throw new BizException("删除企业失败");
+        }
+        return true;
+    }
 }

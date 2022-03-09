@@ -33,8 +33,8 @@
         <!-- sqlMap映射xml配置 生成位置-->
 
         <sqlMapGenerator
-                targetPackage="sqlmap.btrip"
-                targetProject="../btrip/src/main/resources" />
+                targetPackage="mapper"
+                targetProject="../btrip/src/main/resources"/>
         <!-- mybatis接口类配置 生成位置-->
 
         <javaClientGenerator
@@ -43,7 +43,7 @@
                 type="XMLMAPPER" />
 
         <!-- table name 可以添加多个table标签-->
-        <table tableName="btrip_corp_admin"  domainObjectName="CorpAdminPO" enableCountByExample="true"
+        <table tableName="btrip_user"  domainObjectName="UserPO" enableCountByExample="true"
                enableUpdateByExample="true" enableDeleteByExample="true"
                enableSelectByExample="true" selectByExampleQueryId="true" >
             <generatedKey column="id" identity="true" sqlStatement="Mysql"/>

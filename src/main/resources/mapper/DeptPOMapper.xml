@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jaffer.btrip.mapper.DeptPOMapper">
+  <resultMap id="BaseResultMap" type="com.jaffer.btrip.beans.entity.DeptPO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+    <result column="corp_id" jdbcType="VARCHAR" property="corpId" />
+    <result column="dept_pid" jdbcType="BIGINT" property="deptPid" />
+    <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
+    <result column="manager_ids" jdbcType="VARCHAR" property="managerIds" />
+    <result column="level_relation" jdbcType="VARCHAR" property="levelRelation" />
+    <result column="level_relation_mask" jdbcType="VARCHAR" property="levelRelationMask" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, gmt_create, gmt_modified, corp_id, dept_pid, dept_name, manager_ids, level_relation, 
+    level_relation_mask, status
+  </sql>
+  <select id="selectByExample" parameterType="com.jaffer.btrip.beans.entity.DeptPOExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from btrip_dept
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from btrip_dept
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from btrip_dept
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jaffer.btrip.beans.entity.DeptPOExample">
+    delete from btrip_dept
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jaffer.btrip.beans.entity.DeptPO">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into btrip_dept (gmt_create, gmt_modified, corp_id, 
+      dept_pid, dept_name, manager_ids, 
+      level_relation, level_relation_mask, status
+      )
+    values (#{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, #{corpId,jdbcType=VARCHAR}, 
+      #{deptPid,jdbcType=BIGINT}, #{deptName,jdbcType=VARCHAR}, #{managerIds,jdbcType=VARCHAR}, 
+      #{levelRelation,jdbcType=VARCHAR}, #{levelRelationMask,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jaffer.btrip.beans.entity.DeptPO">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into btrip_dept
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
+      <if test="corpId != null">
+        corp_id,
+      </if>
+      <if test="deptPid != null">
+        dept_pid,
+      </if>
+      <if test="deptName != null">
+        dept_name,
+      </if>
+      <if test="managerIds != null">
+        manager_ids,
+      </if>
+      <if test="levelRelation != null">
+        level_relation,
+      </if>
+      <if test="levelRelationMask != null">
+        level_relation_mask,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="corpId != null">
+        #{corpId,jdbcType=VARCHAR},
+      </if>
+      <if test="deptPid != null">
+        #{deptPid,jdbcType=BIGINT},
+      </if>
+      <if test="deptName != null">
+        #{deptName,jdbcType=VARCHAR},
+      </if>
+      <if test="managerIds != null">
+        #{managerIds,jdbcType=VARCHAR},
+      </if>
+      <if test="levelRelation != null">
+        #{levelRelation,jdbcType=VARCHAR},
+      </if>
+      <if test="levelRelationMask != null">
+        #{levelRelationMask,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jaffer.btrip.beans.entity.DeptPOExample" resultType="java.lang.Long">
+    select count(*) from btrip_dept
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update btrip_dept
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.gmtCreate != null">
+        gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.gmtModified != null">
+        gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.corpId != null">
+        corp_id = #{record.corpId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deptPid != null">
+        dept_pid = #{record.deptPid,jdbcType=BIGINT},
+      </if>
+      <if test="record.deptName != null">
+        dept_name = #{record.deptName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.managerIds != null">
+        manager_ids = #{record.managerIds,jdbcType=VARCHAR},
+      </if>
+      <if test="record.levelRelation != null">
+        level_relation = #{record.levelRelation,jdbcType=VARCHAR},
+      </if>
+      <if test="record.levelRelationMask != null">
+        level_relation_mask = #{record.levelRelationMask,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update btrip_dept
+    set id = #{record.id,jdbcType=BIGINT},
+      gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
+      corp_id = #{record.corpId,jdbcType=VARCHAR},
+      dept_pid = #{record.deptPid,jdbcType=BIGINT},
+      dept_name = #{record.deptName,jdbcType=VARCHAR},
+      manager_ids = #{record.managerIds,jdbcType=VARCHAR},
+      level_relation = #{record.levelRelation,jdbcType=VARCHAR},
+      level_relation_mask = #{record.levelRelationMask,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jaffer.btrip.beans.entity.DeptPO">
+    update btrip_dept
+    <set>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="corpId != null">
+        corp_id = #{corpId,jdbcType=VARCHAR},
+      </if>
+      <if test="deptPid != null">
+        dept_pid = #{deptPid,jdbcType=BIGINT},
+      </if>
+      <if test="deptName != null">
+        dept_name = #{deptName,jdbcType=VARCHAR},
+      </if>
+      <if test="managerIds != null">
+        manager_ids = #{managerIds,jdbcType=VARCHAR},
+      </if>
+      <if test="levelRelation != null">
+        level_relation = #{levelRelation,jdbcType=VARCHAR},
+      </if>
+      <if test="levelRelationMask != null">
+        level_relation_mask = #{levelRelationMask,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jaffer.btrip.beans.entity.DeptPO">
+    update btrip_dept
+    set gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      corp_id = #{corpId,jdbcType=VARCHAR},
+      dept_pid = #{deptPid,jdbcType=BIGINT},
+      dept_name = #{deptName,jdbcType=VARCHAR},
+      manager_ids = #{managerIds,jdbcType=VARCHAR},
+      level_relation = #{levelRelation,jdbcType=VARCHAR},
+      level_relation_mask = #{levelRelationMask,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
