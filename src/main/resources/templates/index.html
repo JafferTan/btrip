@@ -5,7 +5,26 @@
     <title>首页</title>
 </head>
 <body>
-  <title>$corpId$</title>
-  <title>$userId$</title>
+
+<div>
+    corpId : <span th:text = "${corpId}"></span>
+</div>
+<div>
+    userId : <span th:text = "${userId}"></span>
+</div>
+<div>
+    phoneNumber : <span th:text = "${phoneNumber}"></span>
+</div>
+
+<div>
+    corpList : <span th:text = "${corpList}"></span>
+    <script>
+        var parse = JSON.parse(corpList);
+        for (var i = 0; i < parse.length; i++) {
+            document.write("<p>" + parse[i] + "</p>" + "<br>");
+        }
+    </script>
+</div>
+
 </body>
 </html>

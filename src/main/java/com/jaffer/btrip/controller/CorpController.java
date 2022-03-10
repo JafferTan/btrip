@@ -9,10 +9,7 @@ import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 
 @Controller
@@ -37,7 +34,7 @@ public class CorpController {
         try {
             BtripResult<Boolean> result = corpService.registerCorp(corpName, phoneNumber, userName);
             if (result == null || BooleanUtils.isFalse(result.getSuccess())) {
-                return BtripResultUtils.returnFailMsg("注册企业失败，失败原因");
+                return BtripResultUtils.returnFailMsg("注册企业失败");
             }
             return result;
         } catch (Exception e) {

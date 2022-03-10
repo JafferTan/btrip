@@ -22,7 +22,7 @@ public class CorpServiceImpl implements CorpService {
     public BtripResult<Boolean> registerCorp(String corpName, String phoneNumber, String userName) {
         try {
             Boolean registerCorp = corpManager.registerCorp(corpName, phoneNumber, userName);
-            if (BooleanUtils.isTrue(registerCorp)) {
+            if (BooleanUtils.isFalse(registerCorp)) {
                 return BtripResultUtils.returnFailMsg("创建企业失败");
             }
             return BtripResultUtils.returnSuccess(true);

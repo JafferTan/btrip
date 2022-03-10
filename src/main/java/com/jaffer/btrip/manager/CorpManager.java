@@ -1,9 +1,7 @@
 package com.jaffer.btrip.manager;
 
-import com.jaffer.btrip.beans.entity.CorpAdminPO;
-import com.jaffer.btrip.beans.entity.CorpPO;
-import com.jaffer.btrip.beans.entity.CorpPOExample;
-import com.jaffer.btrip.beans.entity.UserPO;
+import com.google.common.collect.Lists;
+import com.jaffer.btrip.beans.entity.*;
 import com.jaffer.btrip.enums.BtripSpecialDeptEnum;
 import com.jaffer.btrip.enums.CorpAdminEnum;
 import com.jaffer.btrip.enums.RowStatusEnum;
@@ -14,14 +12,15 @@ import com.jaffer.btrip.helper.UserServiceHelper;
 import com.jaffer.btrip.mapper.CorpAdminPOMapper;
 import com.jaffer.btrip.mapper.CorpPOMapper;
 import com.jaffer.btrip.mapper.UserPOMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class CorpManager {
@@ -76,7 +75,7 @@ public class CorpManager {
 
     public CorpPO getCorpDetailByCorpId(String corpId) {
         CorpPOExample corpPOExample = new CorpPOExample();
-        CorpPOExample.Criteria criteria = corpPOExample.createCriteria().andCorpIdEqualTo(corpId);
+        CorpPOExample.Criteria criteria = corpPOExample.createCriteria().andCorpIdEqualTo(corpId).andStatusEqualTo(RowStatusEnum.NORMAL.getStatus());
         List<CorpPO> corpPOS = corpPOMapper.selectByExample(corpPOExample);
         if (CollectionUtils.isEmpty(corpPOS)) {
             return null;
@@ -98,5 +97,45 @@ public class CorpManager {
             throw new BizException("删除企业失败");
         }
         return true;
+    }
+
+
+    /**
+     * 根据手机号查询企业信息
+     * @param phoneNumber
+     * @return
+     */
+    public List<UserCorpsVO> findUserCorpListByPhoneNumber(String phoneNumber) {
+        List<UserCorpsVO> corpVOList = Lists.newArrayList();
+        UserPOExample userPOExample = new UserPOExample();
+        UserPOExample.Criteria criteria = userPOExample.createCriteria().andPhoneEqualTo(phoneNumber).andStatusEqualTo(RowStatusEnum.NORMAL.getStatus());
+        List<UserPO> userPOS = userPOMapper.selectByExample(userPOExample);
+        if (CollectionUtils.isEmpty(userPOS)) {
+            return corpVOList;
+        }
+        Map<String, String> userCorpMap = new HashMap<>();
+        for (UserPO userPO : userPOS) {
+            userCorpMap.put(userPO.getCorpId(), userPO.getUserId());
+        }
+        List<String> corpIdList = new ArrayList<>(userCorpMap.keySet());
+        List<CorpPO> corpByCorpIdList = this.findCorpByCorpIdList(corpIdList);
+        if (CollectionUtils.isEmpty(corpByCorpIdList)) {
+            return corpVOList;
+        }
+        for (CorpPO corpPO : corpByCorpIdList) {
+            UserCorpsVO corpVO = new UserCorpsVO();
+            corpVO.setUserId(userCorpMap.get(corpPO.getCorpId()));
+            BeanUtils.copyProperties(corpPO, corpVO);
+            corpVOList.add(corpVO);
+        }
+        return corpVOList;
+    }
+
+
+    public List<CorpPO> findCorpByCorpIdList(List<String> corpIdList) {
+        CorpPOExample corpPOExample = new CorpPOExample();
+        CorpPOExample.Criteria criteria = corpPOExample.createCriteria().andCorpIdIn(corpIdList).andStatusEqualTo(RowStatusEnum.NORMAL.getStatus());
+        List<CorpPO> corpPOS = corpPOMapper.selectByExample(corpPOExample);
+        return corpPOS;
     }
 }

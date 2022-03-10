@@ -5,10 +5,23 @@
     <title>登陆页面</title>
 </head>
 <body>
-    <form action="/login" method="post">
+
+    <div>
+        <span th:text = "${failReason}"></span>
+    </div>
+    <br>
+
+    <form action="/loginJson" method="post">
         <p>手机号: <input type="text" name="phoneNumber"></p>
-        <p>密码: <input type="text" name="userName"></p>
+        <p>验证码: <input type="text" name="authCode"></p>
         <button type="submit">登陆</button>
     </form>
+    <br>
+
+    <form action="/getAuthCodeJson" method="post">
+        <p>手机号: <input type="text" name="phoneNumber"></p>
+        <button type="submit">获取验证码</button>
+    </form>
+
 </body>
 </html>
