@@ -11,7 +11,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.List;
 
 @Component
-public class UseManager {
+public class UserManager {
 
     @Autowired
     private UserPOMapper userPOMapper;
@@ -31,4 +31,9 @@ public class UseManager {
         return userPOS.get(0);
     }
 
+    public Long countUserByDeptIdList(List<Long> deptIdList) {
+        UserPOExample userPOExample = new UserPOExample();
+        UserPOExample.Criteria criteria = userPOExample.createCriteria().andDeptIdIn(deptIdList).andStatusEqualTo(RowStatusEnum.NORMAL.getStatus());
+        return userPOMapper.countByExample(userPOExample);
+    }
 }

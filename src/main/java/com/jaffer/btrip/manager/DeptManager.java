@@ -75,6 +75,7 @@ public class DeptManager {
         deptPO.setDeptName(rq.getDeptName());
         deptPO.setCorpId(rq.getCorpId());
         deptPO.setId(rq.getDeptId());
+        deptPO.setDeptPid(rq.getDeptPid());
         deptPO.setManagerIds(rq.getManagerIds());
         deptPO.setStatus(RowStatusEnum.NORMAL.getStatus());
         return deptPO;
@@ -87,7 +88,8 @@ public class DeptManager {
      */
     private void setDeptRelationAndMask(DeptPO deptPO) {
         if (Objects.equals(BtripSpecialDeptEnum.ROOT_DEPT.getDeptId(), deptPO.getDeptPid())) {
-            deptPO.setLevelRelation(BtripSpecialDeptEnum.ROOT_DEPT.getDeptId().toString());
+            deptPO.setLevelRelation(deptPO.getId() + "|" + BtripSpecialDeptEnum.ROOT_DEPT.getDeptId().toString());
+            deptPO.setLevelRelationMask(CodeZipUtil.genKey(deptPO.getId()));
         } else {
             DeptPO parentDept = this.getDeptByDeptId(deptPO.getCorpId(), deptPO.getDeptPid());
             if (Objects.isNull(parentDept)) {
@@ -115,4 +117,21 @@ public class DeptManager {
         return deptPOS.get(0);
     }
 
+    public List<Long> findSubDeptIds(String corpId, String mask) {
+        List<Long> subDeptIdsByMask = deptPOMapper.findSubDeptIdsByMask(corpId, mask);
+        return subDeptIdsByMask;
+    }
+
+    @Transactional
+    public Boolean logicDeleteDepts(String corpId, List<Long> deptList) {
+        DeptPOExample deptPOExample = new DeptPOExample();
+        DeptPOExample.Criteria criteria = deptPOExample.createCriteria().andCorpIdEqualTo(corpId).andIdIn(deptList);
+        DeptPO deptPO = new DeptPO();
+        deptPO.setStatus(RowStatusEnum.DELETE.getStatus());
+        int i = deptPOMapper.updateByExampleSelective(deptPO, deptPOExample);
+        if (i < deptList.size()) {
+            throw new BizException("删除部门失败");
+        }
+        return true;
+    }
 }

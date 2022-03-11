@@ -9,4 +9,7 @@ public interface DeptService {
     BtripResult<Boolean> createOrEditDept(DeptMaintainRQ rq);
 
     BtripResult<DeptPO> getDeptDetailByDeptId(String corpId, Long deptId);
+
+    BtripResult<Boolean> deleteDept(String corpId, Long deptId);
+
 }

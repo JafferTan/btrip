@@ -289,4 +289,8 @@
       status = #{status,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="findSubDeptIdsByMask" resultType="java.lang.Long" parameterType="java.lang.String">
+    select id from btrip_dept where corp_id = #{corpId} and status = 'NORMAL' and  level_relation_mask like concat(#{mask},"%")
+  </select>
 </mapper>

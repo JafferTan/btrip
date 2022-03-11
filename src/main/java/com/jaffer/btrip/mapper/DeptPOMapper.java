@@ -29,4 +29,6 @@ public interface DeptPOMapper {
     int updateByPrimaryKeySelective(DeptPO record);
 
     int updateByPrimaryKey(DeptPO record);
+
+    List<Long> findSubDeptIdsByMask(@Param("corpId")String corpId, @Param("mask") String mask);
 }

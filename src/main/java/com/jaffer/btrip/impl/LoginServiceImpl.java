@@ -3,7 +3,7 @@ package com.jaffer.btrip.impl;
 import com.jaffer.btrip.beans.entity.UserCorpsVO;
 import com.jaffer.btrip.beans.entity.LoginInfo;
 import com.jaffer.btrip.manager.CorpManager;
-import com.jaffer.btrip.manager.UseManager;
+import com.jaffer.btrip.manager.UserManager;
 import com.jaffer.btrip.service.LoginService;
 import com.jaffer.btrip.util.BtripResult;
 import com.jaffer.btrip.util.BtripResultUtils;
@@ -25,7 +25,7 @@ import java.util.Random;
 public class LoginServiceImpl implements LoginService {
 
     @Autowired
-    private UseManager userManager;
+    private UserManager userManager;
 
     @Autowired
     private CorpManager corpManager;
@@ -71,7 +71,7 @@ public class LoginServiceImpl implements LoginService {
             String key = String.format(GET_AUTH_CODE_BY_PHONE_NUMBER, phoneNumber);
             boolean exists = jedis.exists(key);
             if (BooleanUtils.isFalse(exists)) {
-                String authCode = StringUtils.leftPad(new Random().nextInt(10000) + "", 6, "0");
+                String authCode = StringUtils.leftPad(new Random().nextInt(10000) + "", 4, "0");
                 jedis.setex(key,600,authCode);
             }
             return BtripResultUtils.returnSuccess(true);
@@ -80,4 +80,7 @@ public class LoginServiceImpl implements LoginService {
             return BtripResultUtils.returnFailMsg("获取验证码失败，失败原因:" + e.getMessage());
         }
     }
+
+
+
 }

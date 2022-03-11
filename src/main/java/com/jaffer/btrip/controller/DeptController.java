@@ -88,4 +88,20 @@ public class DeptController {
         }
     }
 
+
+    @PostMapping("/deleteDeptJson")
+    @ResponseBody
+    public BtripResult<DeptPO> deleteDept(String corpId , Long deptId) {
+        try {
+            BtripResult<DeptPO> result = deptService.getDeptDetailByDeptId(corpId, deptId);
+            if (result == null || BooleanUtils.isFalse(result.getSuccess())) {
+                return BtripResultUtils.returnFailMsg("查询部门信息失败，失败原因" + result.getErrorMsg());
+            }
+            return result;
+        } catch (Exception e) {
+            log.error("getDeptDetail error, deptId:{}", deptId, e);
+            return BtripResultUtils.returnFailMsg("查询部门信息异常,异常原因 :" + e.getMessage());
+        }
+    }
+
 }
