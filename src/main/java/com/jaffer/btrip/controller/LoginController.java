@@ -1,8 +1,10 @@
 package com.jaffer.btrip.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.jaffer.btrip.beans.entity.CorpPO;
 import com.jaffer.btrip.beans.entity.DeptMaintainRQ;
 import com.jaffer.btrip.beans.entity.LoginInfo;
+import com.jaffer.btrip.beans.entity.UserCorpsVO;
 import com.jaffer.btrip.service.LoginService;
 import com.jaffer.btrip.util.BtripResult;
 import com.jaffer.btrip.util.BtripResultUtils;
@@ -16,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
@@ -47,9 +50,13 @@ public class LoginController {
             }
 
             LoginInfo module = result.getModule();
+            for (UserCorpsVO userCorpsVO : module.getCorpVOList()){
+                model.put("corpId",userCorpsVO.getCorpId());
+                model.put("corpName",userCorpsVO.getCorpName());
+                model.put("userId",userCorpsVO.getUserId());
+            }
             model.put("phoneNumber", phoneNumber);
-            model.put("corpList", JSON.toJSONString(module));
-            modelAndView.setViewName("/index");
+            modelAndView.setViewName("/home");
             return modelAndView;
         } catch (Exception e) {
             log.error("login fail, phoneNumber:{}, authCode:{}",phoneNumber, authCode, e);
@@ -95,8 +102,9 @@ public class LoginController {
     @ResponseBody
     public ModelAndView selectUserCorp(ModelAndView modelAndView, @RequestParam("corpId") String corpId) {
         Map<String, Object> model = modelAndView.getModel();
+        System.out.println(corpId);
         model.put("corpId", corpId);
-        modelAndView.setViewName("/index");
+        modelAndView.setViewName("/home");
         return modelAndView;
     }
 

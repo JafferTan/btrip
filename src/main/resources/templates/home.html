@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div>
+        corpId : <span th:text = "${corpId}"></span>
+    </div>
+    <div>
+        userId : <span th:text = "${userId}"></span>
+    </div>
+    <div>
+        phoneNumber : <span th:text = "${phoneNumber}"></span>
+    </div>
+
+
+    <form action="/selectUserCorpJson" method="post">
+        <input type="text" name="corpId" hidden></p>
+        <button type="submit">选择企业</button>
+    </form>
+    <br>
+</body>
+</html>
