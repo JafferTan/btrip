@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -20,13 +21,13 @@ import java.util.UUID;
 @Component
 public class UserManager {
 
-    @Autowired
+    @Resource
     private UserPOMapper userPOMapper;
 
-    @Autowired
+    @Resource
     private CorpAdminManager corpAdminManager;
 
-    @Autowired
+    @Resource
     private DeptManager deptManager;
 
     /**
@@ -37,6 +38,21 @@ public class UserManager {
     public UserPO findUserByPhoneNumber(String phoneNumber) {
         UserPOExample userPOExample = new UserPOExample();
         UserPOExample.Criteria criteria = userPOExample.createCriteria().andPhoneEqualTo(phoneNumber).andStatusEqualTo(RowStatusEnum.NORMAL.getStatus());
+        List<UserPO> userPOS = userPOMapper.selectByExample(userPOExample);
+        if (CollectionUtils.isEmpty(userPOS)) {
+            return null;
+        }
+        return userPOS.get(0);
+    }
+
+    /**
+     * 根据手机号查询用户信息
+     * @param phoneNumber
+     * @return
+     */
+    public UserPO findUserByPhoneNumber(String corpId, String phoneNumber) {
+        UserPOExample userPOExample = new UserPOExample();
+        UserPOExample.Criteria criteria = userPOExample.createCriteria().andPhoneEqualTo(phoneNumber).andStatusEqualTo(RowStatusEnum.NORMAL.getStatus()).andCorpIdEqualTo(corpId);
         List<UserPO> userPOS = userPOMapper.selectByExample(userPOExample);
         if (CollectionUtils.isEmpty(userPOS)) {
             return null;
@@ -65,6 +81,12 @@ public class UserManager {
                 throw new BizException("部门不存在");
             }
         }
+
+        UserPO userByPhoneNumber = this.findUserByPhoneNumber(rq.getCorpId(), rq.getPhoneNumber());
+        if (!Objects.isNull(userByPhoneNumber)) {
+            throw new BizException("该公司已有相同手机号的用户");
+        }
+
 
         UserPO userPO = this.convert2UserPO(rq);
         userPO.setGmtCreate(new Date());
@@ -101,6 +123,11 @@ public class UserManager {
         UserPO userByUserId = this.getUserByUserId(rq.getCorpId(), rq.getUserId());
         if (Objects.isNull(userByUserId)) {
             throw new BizException("用户不存在");
+        }
+
+        UserPO userByPhoneNumber = this.findUserByPhoneNumber(rq.getCorpId(), rq.getPhoneNumber());
+        if (!Objects.isNull(userByPhoneNumber) && !StringUtils.equals(userByPhoneNumber.getUserId(), rq.getUserId())) {
+            throw new BizException("该公司已有相同手机号的用户");
         }
 
         userByUserId.setGmtModified(new Date());
@@ -155,4 +182,18 @@ public class UserManager {
         return true;
     }
 
+
+    /**
+     * 根据用户idList查询用户
+     * @param corpId
+     * @param userIdList
+     * @return
+     */
+    public List<UserPO> getUserByUserIdList(String corpId, List<String> userIdList) {
+
+        UserPOExample userPOExample = new UserPOExample();
+        UserPOExample.Criteria criteria = userPOExample.
+                createCriteria().andCorpIdEqualTo(corpId).andUserIdIn(userIdList).andStatusEqualTo(RowStatusEnum.NORMAL.getStatus());
+        return userPOMapper.selectByExample(userPOExample);
+    }
 }

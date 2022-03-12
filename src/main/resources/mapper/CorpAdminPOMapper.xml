@@ -112,6 +112,10 @@
     values (#{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, #{corpId,jdbcType=VARCHAR}, 
       #{userId,jdbcType=VARCHAR}, #{adminType,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}
       )
+    ON DUPLICATE KEY UPDATE
+    gmt_modified = now(),
+    status = 'NORMAL',
+    admin_type = #{adminType,jdbcType=VARCHAR}
   </insert>
   <insert id="insertSelective" parameterType="com.jaffer.btrip.beans.entity.CorpAdminPO">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
