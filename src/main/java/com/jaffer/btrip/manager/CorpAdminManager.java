@@ -7,8 +7,10 @@ import com.jaffer.btrip.beans.entity.UserPO;
 import com.jaffer.btrip.enums.CorpAdminEnum;
 import com.jaffer.btrip.enums.RowStatusEnum;
 import com.jaffer.btrip.exception.BizException;
+import com.jaffer.btrip.helper.CorpAdminServiceHelper;
 import com.jaffer.btrip.mapper.CorpAdminPOMapper;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -27,6 +29,9 @@ public class CorpAdminManager {
 
     @Resource
     private UserManager userManager;
+
+    @Autowired
+    private CorpAdminServiceHelper corpAdminServiceHelper;
 
 
     /**
@@ -154,7 +159,7 @@ public class CorpAdminManager {
             throw new BizException("该用户不存在,请先创建用户再转让超级管理员权限");
         }
 
-        CorpAdminPO corpAdminPO = this.buildCorpAdminPO(corpId, userId, CorpAdminEnum.ADMIN);
+        CorpAdminPO corpAdminPO = corpAdminServiceHelper.buildCorpAdminPO(corpId, userId, CorpAdminEnum.ADMIN);
         int insert = corpAdminPOMapper.insert(corpAdminPO);
         if (insert <= 0) {
             throw new BizException("创建管理员信息失败");
@@ -170,7 +175,7 @@ public class CorpAdminManager {
             throw new BizException("该用户不存在,请先创建用户再转让超级管理员权限");
         }
 
-        CorpAdminPO corpAdminPO = this.buildCorpAdminPO(corpId, userId, CorpAdminEnum.SUPER_ADMIN);
+        CorpAdminPO corpAdminPO = corpAdminServiceHelper.buildCorpAdminPO(corpId, userId, CorpAdminEnum.SUPER_ADMIN);
         int insert = corpAdminPOMapper.insert(corpAdminPO);
         if (insert <= 0) {
             throw new BizException("创建超级管理员信息失败");
@@ -178,18 +183,6 @@ public class CorpAdminManager {
 
         return true;
     }
-
-    private CorpAdminPO buildCorpAdminPO(String corpId, String userId, CorpAdminEnum corpAdminEnum) {
-        CorpAdminPO corpAdminPO = new CorpAdminPO();
-        corpAdminPO.setGmtCreate(new Date());
-        corpAdminPO.setGmtModified(new Date());
-        corpAdminPO.setCorpId(corpId);
-        corpAdminPO.setUserId(userId);
-        corpAdminPO.setAdminType(corpAdminEnum.getAdminType());
-        corpAdminPO.setStatus(RowStatusEnum.NORMAL.getStatus());
-        return corpAdminPO;
-    }
-
 
     @Transactional
     public Boolean changeUserToSuperAdmin(String corpId, String userId, String oldUserId) {

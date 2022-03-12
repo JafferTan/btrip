@@ -9,6 +9,7 @@ import java.util.Date;
 
 @Component
 public class CorpAdminServiceHelper {
+
     public CorpAdminPO buildCorpAdminPO(String corpId, String userId, CorpAdminEnum corpAdminEnum){
         CorpAdminPO corpAdminPO = new CorpAdminPO();
         corpAdminPO.setGmtCreate(new Date());
@@ -19,4 +20,6 @@ public class CorpAdminServiceHelper {
         corpAdminPO.setAdminType(corpAdminEnum.getAdminType());
         return corpAdminPO;
     }
+
+
 }

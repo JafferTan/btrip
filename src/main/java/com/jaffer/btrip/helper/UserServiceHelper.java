@@ -1,5 +1,6 @@
 package com.jaffer.btrip.helper;
 
+import com.jaffer.btrip.beans.entity.UserMaintainRQ;
 import com.jaffer.btrip.beans.entity.UserPO;
 import com.jaffer.btrip.enums.RowStatusEnum;
 import org.springframework.stereotype.Component;
@@ -28,6 +29,17 @@ public class UserServiceHelper {
         userPO.setStatus(RowStatusEnum.NORMAL.getStatus());
         userPO.setUserName(userName);
         userPO.setDeptId(deptId);
+        return userPO;
+    }
+
+    public UserPO convert2UserPO(UserMaintainRQ rq) {
+        UserPO userPO = new UserPO();
+        userPO.setUserName(rq.getUserName());
+        userPO.setCorpId(rq.getCorpId());
+        userPO.setGmtModified(new Date());
+        userPO.setPhone(rq.getPhoneNumber());
+        userPO.setDeptId(rq.getDeptId());
+        userPO.setStatus(RowStatusEnum.NORMAL.getStatus());
         return userPO;
     }
 }

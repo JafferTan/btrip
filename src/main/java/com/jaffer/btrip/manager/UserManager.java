@@ -7,8 +7,10 @@ import com.jaffer.btrip.beans.entity.UserPOExample;
 import com.jaffer.btrip.enums.BtripSpecialDeptEnum;
 import com.jaffer.btrip.enums.RowStatusEnum;
 import com.jaffer.btrip.exception.BizException;
+import com.jaffer.btrip.helper.UserServiceHelper;
 import com.jaffer.btrip.mapper.UserPOMapper;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -30,6 +32,9 @@ public class UserManager {
 
     @Resource
     private DeptManager deptManager;
+
+    @Autowired
+    private UserServiceHelper userServiceHelper;
 
     /**
      * 根据手机号查询用户信息
@@ -89,7 +94,7 @@ public class UserManager {
         }
 
 
-        UserPO userPO = this.convert2UserPO(rq);
+        UserPO userPO = userServiceHelper.convert2UserPO(rq);
         userPO.setGmtCreate(new Date());
         userPO.setUserId("btrip" + UUID.randomUUID().toString().replace("-",""));
         userPO.setGmtCreate(new Date());
@@ -101,16 +106,6 @@ public class UserManager {
         return true;
     }
 
-    private UserPO convert2UserPO(UserMaintainRQ rq) {
-        UserPO userPO = new UserPO();
-        userPO.setUserName(rq.getUserName());
-        userPO.setCorpId(rq.getCorpId());
-        userPO.setGmtModified(new Date());
-        userPO.setPhone(rq.getPhoneNumber());
-        userPO.setDeptId(rq.getDeptId());
-        userPO.setStatus(RowStatusEnum.NORMAL.getStatus());
-        return userPO;
-    }
 
     /**
      * 编辑用户信息
