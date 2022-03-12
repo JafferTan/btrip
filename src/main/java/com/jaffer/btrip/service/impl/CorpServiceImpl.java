@@ -44,7 +44,7 @@ public class CorpServiceImpl implements CorpService {
             log.error("registerCorp error, corpName:{}, phoneNumber:{}, userName:{}", corpName, phoneNumber, userName,e);
             return BtripResultUtils.returnFailMsg("创建企业失败,失败原因 :" + e.getMessage());
         } finally {
-            RedisLockUtils.unlock(lockKey);
+            RedisLockUtils.releaseLock(lockKey);
         }
     }
 
@@ -83,7 +83,7 @@ public class CorpServiceImpl implements CorpService {
             log.error("deleteCorpByCorpId error, corpId:{}", corpId,e);
             return BtripResultUtils.returnFailMsg("删除企业失败,失败原因 :" + e.getMessage());
         } finally {
-            RedisLockUtils.unlock(lockKey);
+            RedisLockUtils.releaseLock(lockKey);
         }
     }
 }

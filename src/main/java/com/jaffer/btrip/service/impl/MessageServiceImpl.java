@@ -5,9 +5,12 @@ import com.jaffer.btrip.util.BtripResult;
 
 import java.util.Map;
 
+/**
+ * 发送短信服务
+ */
 public class MessageServiceImpl implements MessageService {
     @Override
-    public BtripResult<Boolean> sendMobileMessage(String telePhone, Map<String, Object> templateMap) {
+    public BtripResult<Boolean> sendMobileMessage(String phoneNumber, Map<String, Object> templateMap) {
         return null;
     }
 }

@@ -49,7 +49,7 @@ public class DeptServiceImpl implements DeptService {
             log.error("createOrEditDept fail, rq:{}", rq, e);
             return BtripResultUtils.returnFailMsg("维护部门失败,失败原因:" + e.getMessage());
         } finally {
-            RedisLockUtils.unlock(lockKey);
+            RedisLockUtils.releaseLock(lockKey);
         }
     }
 
@@ -96,7 +96,7 @@ public class DeptServiceImpl implements DeptService {
             log.error("deleteDept fail, corpId:{}, deptId:{}", corpId, deptId, e);
             return BtripResultUtils.returnFailMsg("查询的部门失败,失败原因:" + e.getMessage());
         } finally {
-            RedisLockUtils.unlock(lockKey);
+            RedisLockUtils.releaseLock(lockKey);
         }
     }
 }

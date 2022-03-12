@@ -17,6 +17,11 @@ public class CodeZipUtil {
      */
     private static final long MAX_NUM = 1L << 36;
 
+    /**
+     * 生成编码
+     * @param num
+     * @return
+     */
     public static String genKey(long num) {
         String code = zipCoding(num);
         byte limit = (byte) (FORMAT_LENGTH - code.length());

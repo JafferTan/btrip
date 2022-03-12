@@ -8,5 +8,11 @@ import java.util.Map;
  * 消息服务接口
  */
 public interface MessageService {
-    BtripResult<Boolean> sendMobileMessage(String telePhone, Map<String,Object> templateMap);
+    /**
+     * 发送短信服务
+     * @param phoneNumber
+     * @param templateMap
+     * @return
+     */
+    BtripResult<Boolean> sendMobileMessage(String phoneNumber, Map<String, Object> templateMap);
 }

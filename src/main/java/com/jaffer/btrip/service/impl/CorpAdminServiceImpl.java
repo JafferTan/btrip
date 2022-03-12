@@ -77,7 +77,7 @@ public class CorpAdminServiceImpl implements CorpAdminService {
             log.error("changeCorpSuperAdminInfo fail, corpId:{}, newCorpAdminUserId:{}, operator:{}",corpId, newCorpAdminUserId, operator, e);
             return BtripResultUtils.returnFailMsg("转让超级管理员权限失败，失败原因:" + e.getMessage());
         } finally {
-            RedisLockUtils.unlock(lockKey);
+            RedisLockUtils.releaseLock(lockKey);
         }
     }
 
@@ -106,7 +106,7 @@ public class CorpAdminServiceImpl implements CorpAdminService {
             log.error("addCorpAdmin fail, corpId:{}, userId:{}",corpId, userId, e);
             return BtripResultUtils.returnFailMsg("新增管理员失败，失败原因:" + e.getMessage());
         } finally {
-            RedisLockUtils.unlock(lockKey);
+            RedisLockUtils.releaseLock(lockKey);
         }
     }
 
@@ -130,7 +130,7 @@ public class CorpAdminServiceImpl implements CorpAdminService {
             log.error("addCorpAdmin fail, corpId:{}, userId:{}",corpId, userId, e);
             return BtripResultUtils.returnFailMsg("回收管理员权限失败，失败原因:" + e.getMessage());
         } finally {
-            RedisLockUtils.unlock(lockKey);
+            RedisLockUtils.releaseLock(lockKey);
         }
     }
 

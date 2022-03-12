@@ -39,7 +39,7 @@ public class RedisLockUtils {
      * 解锁
      * @param key
      */
-    public static void unlock(String key) {
+    public static void releaseLock(String key) {
         Jedis jedis = RedisUtils.getJedis();
         assert jedis != null;
         jedis.del(key);
