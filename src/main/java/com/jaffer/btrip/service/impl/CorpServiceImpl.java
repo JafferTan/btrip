@@ -1,4 +1,4 @@
-package com.jaffer.btrip.impl;
+package com.jaffer.btrip.service.impl;
 
 import com.jaffer.btrip.beans.entity.CorpPO;
 import com.jaffer.btrip.manager.CorpManager;

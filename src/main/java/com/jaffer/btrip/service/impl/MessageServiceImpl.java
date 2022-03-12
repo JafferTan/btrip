@@ -1,4 +1,4 @@
-package com.jaffer.btrip.impl;
+package com.jaffer.btrip.service.impl;
 
 import com.jaffer.btrip.message.MessageService;
 import com.jaffer.btrip.util.BtripResult;

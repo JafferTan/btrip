@@ -1,4 +1,4 @@
-package com.jaffer.btrip.impl;
+package com.jaffer.btrip.service.impl;
 
 import com.jaffer.btrip.beans.entity.DeptMaintainRQ;
 import com.jaffer.btrip.beans.entity.DeptPO;

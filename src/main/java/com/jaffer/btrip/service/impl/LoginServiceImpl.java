@@ -1,4 +1,4 @@
-package com.jaffer.btrip.impl;
+package com.jaffer.btrip.service.impl;
 
 import com.jaffer.btrip.beans.entity.UserCorpsVO;
 import com.jaffer.btrip.beans.entity.LoginInfo;
