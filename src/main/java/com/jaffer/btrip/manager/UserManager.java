@@ -1,13 +1,14 @@
 package com.jaffer.btrip.manager;
 
-import com.jaffer.btrip.beans.entity.*;
+import com.jaffer.btrip.beans.entity.DeptPO;
+import com.jaffer.btrip.beans.entity.UserMaintainRQ;
+import com.jaffer.btrip.beans.entity.UserPO;
+import com.jaffer.btrip.beans.entity.UserPOExample;
 import com.jaffer.btrip.enums.BtripSpecialDeptEnum;
 import com.jaffer.btrip.enums.RowStatusEnum;
 import com.jaffer.btrip.exception.BizException;
 import com.jaffer.btrip.mapper.UserPOMapper;
-import com.mysql.cj.result.Row;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;

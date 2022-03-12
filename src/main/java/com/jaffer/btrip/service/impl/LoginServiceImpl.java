@@ -1,7 +1,7 @@
 package com.jaffer.btrip.service.impl;
 
-import com.jaffer.btrip.beans.entity.UserCorpsVO;
 import com.jaffer.btrip.beans.entity.LoginInfo;
+import com.jaffer.btrip.beans.entity.UserCorpsVO;
 import com.jaffer.btrip.manager.CorpManager;
 import com.jaffer.btrip.manager.UserManager;
 import com.jaffer.btrip.service.LoginService;
@@ -69,6 +69,7 @@ public class LoginServiceImpl implements LoginService {
 
             Jedis jedis = RedisUtils.getJedis();
             String key = String.format(GET_AUTH_CODE_BY_PHONE_NUMBER, phoneNumber);
+            assert jedis != null;
             boolean exists = jedis.exists(key);
             if (BooleanUtils.isFalse(exists)) {
                 String authCode = StringUtils.leftPad(new Random().nextInt(10000) + "", 4, "0");

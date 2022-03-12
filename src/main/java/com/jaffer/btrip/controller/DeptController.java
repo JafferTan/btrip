@@ -1,6 +1,5 @@
 package com.jaffer.btrip.controller;
 
-import com.jaffer.btrip.beans.entity.CorpPO;
 import com.jaffer.btrip.beans.entity.DeptMaintainRQ;
 import com.jaffer.btrip.beans.entity.DeptPO;
 import com.jaffer.btrip.service.DeptService;
@@ -12,15 +11,11 @@ import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.util.Enumeration;
 import java.util.Objects;
 
 @Controller

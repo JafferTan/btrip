@@ -8,20 +8,21 @@ import com.jaffer.btrip.manager.UserManager;
 import com.jaffer.btrip.service.DeptService;
 import com.jaffer.btrip.util.BtripResult;
 import com.jaffer.btrip.util.BtripResultUtils;
+import com.jaffer.btrip.util.RedisLockUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.mbeans.UserMBean;
 import org.apache.commons.lang.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Slf4j
 @Service
 public class DeptServiceImpl implements DeptService {
+
+    private static final String LOCK_KEY_MAINTAIN_DEPT = "LOCK_KEY_MAINTAIN_DEPT_%s";
+
     @Autowired
     private DeptManager deptManager;
 
@@ -30,7 +31,14 @@ public class DeptServiceImpl implements DeptService {
 
     @Override
     public BtripResult<Boolean> createOrEditDept(DeptMaintainRQ rq) {
+
+        String lockKey = String.format(LOCK_KEY_MAINTAIN_DEPT, rq.getCorpId());
         try {
+            boolean lock = RedisLockUtils.tryLock(lockKey);
+            if (BooleanUtils.isFalse(lock)) {
+                return BtripResultUtils.returnFailMsg("多个用户正在维护部门信息，请稍后重试");
+            }
+
             if (Objects.isNull(rq.getDeptId())) {
                 deptManager.createDept(rq);
             } else {
@@ -40,6 +48,8 @@ public class DeptServiceImpl implements DeptService {
         } catch (Exception e) {
             log.error("createOrEditDept fail, rq:{}", rq, e);
             return BtripResultUtils.returnFailMsg("维护部门失败,失败原因:" + e.getMessage());
+        } finally {
+            RedisLockUtils.unlock(lockKey);
         }
     }
 
@@ -59,7 +69,13 @@ public class DeptServiceImpl implements DeptService {
 
     @Override
     public BtripResult<Boolean> deleteDept(String corpId, Long deptId) {
+        String lockKey = String.format(LOCK_KEY_MAINTAIN_DEPT, corpId);
         try {
+            boolean lock = RedisLockUtils.tryLock(lockKey);
+            if (BooleanUtils.isFalse(lock)) {
+                return BtripResultUtils.returnFailMsg("多个用户正在维护部门信息，请稍后重试");
+            }
+
             if (Objects.equals(deptId, BtripSpecialDeptEnum.ROOT_DEPT.getDeptId())) {
                 return BtripResultUtils.returnFailMsg("特殊部门不能删除");
             }
@@ -79,6 +95,8 @@ public class DeptServiceImpl implements DeptService {
         } catch (Exception e) {
             log.error("deleteDept fail, corpId:{}, deptId:{}", corpId, deptId, e);
             return BtripResultUtils.returnFailMsg("查询的部门失败,失败原因:" + e.getMessage());
+        } finally {
+            RedisLockUtils.unlock(lockKey);
         }
     }
 }

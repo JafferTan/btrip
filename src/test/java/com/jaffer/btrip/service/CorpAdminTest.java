@@ -55,7 +55,8 @@ public class CorpAdminTest extends AbsTest {
     @Test
     public void testDeleteAdmin(){
         String oldUserId = "btripf0cabfb533fb4189a48f06db14a2e400";
-
+        BtripResult<Boolean> result = corpAdminService.deleteCorpAdmin(testCorpId, oldUserId);
+        System.out.println(JSON.toJSONString(result));
     }
 
 }

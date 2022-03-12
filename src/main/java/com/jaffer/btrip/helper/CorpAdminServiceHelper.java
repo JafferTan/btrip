@@ -4,7 +4,6 @@ import com.jaffer.btrip.beans.entity.CorpAdminPO;
 import com.jaffer.btrip.enums.CorpAdminEnum;
 import com.jaffer.btrip.enums.RowStatusEnum;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 
 import java.util.Date;
 

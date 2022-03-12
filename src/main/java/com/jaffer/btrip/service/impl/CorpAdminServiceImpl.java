@@ -6,7 +6,7 @@ import com.jaffer.btrip.manager.UserManager;
 import com.jaffer.btrip.service.CorpAdminService;
 import com.jaffer.btrip.util.BtripResult;
 import com.jaffer.btrip.util.BtripResultUtils;
-import io.netty.util.internal.StringUtil;
+import com.jaffer.btrip.util.RedisLockUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
@@ -25,6 +25,8 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class CorpAdminServiceImpl implements CorpAdminService {
+
+    private final static String LOCK_KEY_CORP_ADMIN_MAINTAIN = "LOCK_KEY_CORP_ADMIN_MAINTAIN_%s";
 
     @Autowired
     private CorpAdminManager corpAdminManager;
@@ -50,7 +52,14 @@ public class CorpAdminServiceImpl implements CorpAdminService {
     @Override
     public BtripResult<Boolean> changeCorpSuperAdmin(String corpId, String newCorpAdminUserId, String operator) {
 
+        String lockKey = String.format(LOCK_KEY_CORP_ADMIN_MAINTAIN, corpId);
         try {
+            boolean lock = RedisLockUtils.tryLock(lockKey);
+            if (BooleanUtils.isFalse(lock)) {
+                return BtripResultUtils.returnFailMsg("多个用户正在维护企业管理员信息，请稍后重试");
+            }
+
+
             String corpSuperAdminUserId = corpAdminManager.getCorpSuperAdminUserId(corpId);
             if (!StringUtils.equals(operator, corpSuperAdminUserId)) {
                 return BtripResultUtils.returnFailMsg("非企业超级管理员不允许转让管理员权限");
@@ -67,13 +76,21 @@ public class CorpAdminServiceImpl implements CorpAdminService {
         } catch (Exception e) {
             log.error("changeCorpSuperAdminInfo fail, corpId:{}, newCorpAdminUserId:{}, operator:{}",corpId, newCorpAdminUserId, operator, e);
             return BtripResultUtils.returnFailMsg("转让超级管理员权限失败，失败原因:" + e.getMessage());
+        } finally {
+            RedisLockUtils.unlock(lockKey);
         }
     }
 
 
     @Override
     public BtripResult<Boolean> addCorpAdmin(String corpId, String userId) {
+        String lockKey = String.format(LOCK_KEY_CORP_ADMIN_MAINTAIN, corpId);
         try {
+            boolean lock = RedisLockUtils.tryLock(lockKey);
+            if (BooleanUtils.isFalse(lock)) {
+                return BtripResultUtils.returnFailMsg("多个用户正在维护企业管理员信息，请稍后重试");
+            }
+
             Set<String> adminUserIdSet = corpAdminManager.getCorpAllAdminList(corpId).stream().map(UserPO::getUserId).collect(Collectors.toSet());
             if (adminUserIdSet.contains(userId)) {
                 return BtripResultUtils.returnFailMsg("该用户已是企业管理员");
@@ -88,13 +105,21 @@ public class CorpAdminServiceImpl implements CorpAdminService {
         } catch (Exception e) {
             log.error("addCorpAdmin fail, corpId:{}, userId:{}",corpId, userId, e);
             return BtripResultUtils.returnFailMsg("新增管理员失败，失败原因:" + e.getMessage());
+        } finally {
+            RedisLockUtils.unlock(lockKey);
         }
     }
 
     @Override
     public BtripResult<Boolean> deleteCorpAdmin(String corpId, String userId) {
+        String lockKey = String.format(LOCK_KEY_CORP_ADMIN_MAINTAIN, corpId);
         try {
-            Set<String> adminUserIdSet = corpAdminManager.getCorpAdminList(corpId).stream().map(UserPO::getUserId).collect(Collectors.toSet());
+            boolean lock = RedisLockUtils.tryLock(lockKey);
+            if (BooleanUtils.isFalse(lock)) {
+                return BtripResultUtils.returnFailMsg("多个用户正在维护企业管理员信息，请稍后重试");
+            }
+
+            Set<String> adminUserIdSet = corpAdminManager.getCorpAllAdminList(corpId).stream().map(UserPO::getUserId).collect(Collectors.toSet());
             if (!adminUserIdSet.contains(userId)) {
                 return BtripResultUtils.returnFailMsg("该用户不是企业管理员");
             }
@@ -104,6 +129,8 @@ public class CorpAdminServiceImpl implements CorpAdminService {
         } catch (Exception e) {
             log.error("addCorpAdmin fail, corpId:{}, userId:{}",corpId, userId, e);
             return BtripResultUtils.returnFailMsg("回收管理员权限失败，失败原因:" + e.getMessage());
+        } finally {
+            RedisLockUtils.unlock(lockKey);
         }
     }
 

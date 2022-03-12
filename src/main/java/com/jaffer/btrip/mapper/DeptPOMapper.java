@@ -2,10 +2,10 @@ package com.jaffer.btrip.mapper;
 
 import com.jaffer.btrip.beans.entity.DeptPO;
 import com.jaffer.btrip.beans.entity.DeptPOExample;
-import java.util.List;
-
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 @Mapper
 public interface DeptPOMapper {
     long countByExample(DeptPOExample example);

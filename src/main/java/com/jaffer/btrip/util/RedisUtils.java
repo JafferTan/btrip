@@ -4,8 +4,6 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
-import java.time.Duration;
-
 public class RedisUtils {
 
     //Redis服务器IP

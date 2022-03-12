@@ -1,26 +1,20 @@
 package com.jaffer.btrip.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.jaffer.btrip.beans.entity.CorpPO;
-import com.jaffer.btrip.beans.entity.DeptMaintainRQ;
 import com.jaffer.btrip.beans.entity.LoginInfo;
 import com.jaffer.btrip.beans.entity.UserCorpsVO;
 import com.jaffer.btrip.service.LoginService;
 import com.jaffer.btrip.util.BtripResult;
-import com.jaffer.btrip.util.BtripResultUtils;
-import com.jaffer.btrip.util.BtripSession;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 @Controller

@@ -2,7 +2,6 @@ package com.jaffer.btrip.service;
 
 import com.jaffer.btrip.beans.entity.LoginInfo;
 import com.jaffer.btrip.util.BtripResult;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 
 public interface LoginService {
 
