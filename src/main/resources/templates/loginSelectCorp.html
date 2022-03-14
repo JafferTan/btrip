@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>选择企业列表</title>
+</head>
+<body>
+
+<div>
+    corpId : <span th:text = "${corpList}"></span>
+</div>
+
+
+    <form action="/selectUserCorpJson" method="post">
+        <p>手机号: <input type="text" name="corpId"></p>
+        <p>企业名称: <input type="text" name="corpName"></p>
+        <p>用户id: <input type="text" name="userId"></p>
+        <button type="submit">选择企业</button>
+    </form>
+    <br>
+
+    <a href="/registerCorp">创建新企业</a>
+
+<form action="/loginOutJson" method="post">
+    <button type="submit">登出</button>
+</form>
+
+</body>
+</html>

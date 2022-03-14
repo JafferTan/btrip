@@ -6,20 +6,18 @@
 </head>
 <body>
     <div>
-        corpId : <span th:text = "${corpId}"></span>
+        corpId : <span th:text = "${loginInfo.corpId}"></span>
     </div>
     <div>
-        userId : <span th:text = "${userId}"></span>
+        userId : <span th:text = "${loginInfo.userId}"></span>
     </div>
     <div>
-        phoneNumber : <span th:text = "${phoneNumber}"></span>
+        phoneNumber : <span th:text = "${loginInfo.phoneNumber}"></span>
     </div>
 
-
-    <form action="/selectUserCorpJson" method="post">
-        <input type="text" name="corpId"></p>
-        <button type="submit">选择企业</button>
+    欢迎登陆首页！
+    <form action="/loginOutJson" method="post">
+        <button type="submit">登出</button>
     </form>
-    <br>
 </body>
 </html>

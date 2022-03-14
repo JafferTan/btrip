@@ -2,10 +2,14 @@ package com.jaffer.btrip.beans.entity;
 
 import lombok.Data;
 
-import java.util.List;
-
 @Data
 public class LoginInfo {
 
-    private List<UserCorpsVO> corpVOList;
+    private String corpId;
+
+    private String userId;
+
+    private String phoneNumber;
+
+    private String corpName;
 }

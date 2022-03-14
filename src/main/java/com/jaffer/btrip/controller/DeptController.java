@@ -2,10 +2,11 @@ package com.jaffer.btrip.controller;
 
 import com.jaffer.btrip.beans.entity.DeptMaintainRQ;
 import com.jaffer.btrip.beans.entity.DeptPO;
+import com.jaffer.btrip.beans.entity.LoginInfo;
 import com.jaffer.btrip.service.DeptService;
 import com.jaffer.btrip.util.BtripResult;
 import com.jaffer.btrip.util.BtripResultUtils;
-import com.jaffer.btrip.util.BtripSession;
+import com.jaffer.btrip.util.BtripSessionUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
@@ -26,16 +27,16 @@ public class DeptController {
 
     @GetMapping("/deptInfo")
     public String helloWorld() {
-        return "deptInfo";
+        return "/deptInfo";
     }
 
 
     @PostMapping("/createOrEditDeptJson")
     @ResponseBody
-    public BtripResult<Boolean> createOrEditDept(HttpServletRequest request , DeptMaintainRQ deptMaintainRQ) {
+    public BtripResult<Boolean> createOrEditDept(DeptMaintainRQ deptMaintainRQ) {
         try {
-            String corpId = BtripSession.getString(request, "corpId");
-            deptMaintainRQ.setCorpId(corpId);
+            LoginInfo loginInfo = BtripSessionUtils.getLoginInfo();
+            deptMaintainRQ.setCorpId(loginInfo.getCorpId());
             this.checkDeptMaitainRQ(deptMaintainRQ);
 
             BtripResult<Boolean> result = deptService.createOrEditDept(deptMaintainRQ);
@@ -68,10 +69,10 @@ public class DeptController {
 
     @PostMapping("/getDeptDetailJson")
     @ResponseBody
-    public BtripResult<DeptPO> getDeptDetail(HttpServletRequest request , Long deptId) {
+    public BtripResult<DeptPO> getDeptDetail(Long deptId) {
         try {
-            String corpId = BtripSession.getString(request, "corpId");
-
+            LoginInfo loginInfo = BtripSessionUtils.getLoginInfo();
+            String corpId = loginInfo.getCorpId();
             BtripResult<DeptPO> result = deptService.getDeptDetailByDeptId(corpId, deptId);
             if (result == null || BooleanUtils.isFalse(result.getSuccess())) {
                 return BtripResultUtils.returnFailMsg("查询部门信息失败，失败原因" + result.getErrorMsg());
@@ -86,8 +87,10 @@ public class DeptController {
 
     @PostMapping("/deleteDeptJson")
     @ResponseBody
-    public BtripResult<DeptPO> deleteDept(String corpId , Long deptId) {
+    public BtripResult<DeptPO> deleteDept(Long deptId) {
         try {
+            LoginInfo loginInfo = BtripSessionUtils.getLoginInfo();
+            String corpId = loginInfo.getCorpId();
             BtripResult<DeptPO> result = deptService.getDeptDetailByDeptId(corpId, deptId);
             if (result == null || BooleanUtils.isFalse(result.getSuccess())) {
                 return BtripResultUtils.returnFailMsg("查询部门信息失败，失败原因" + result.getErrorMsg());

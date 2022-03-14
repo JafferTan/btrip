@@ -1,9 +1,11 @@
 package com.jaffer.btrip.controller;
 
 import com.jaffer.btrip.beans.entity.CorpPO;
+import com.jaffer.btrip.beans.entity.LoginInfo;
 import com.jaffer.btrip.service.CorpService;
 import com.jaffer.btrip.util.BtripResult;
 import com.jaffer.btrip.util.BtripResultUtils;
+import com.jaffer.btrip.util.BtripSessionUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
@@ -22,14 +24,18 @@ public class CorpController {
     @Autowired
     private CorpService corpService;
 
-    @GetMapping("/corpInfo")
+    @GetMapping("/registerCorp")
     public String helloWorld() {
-        return "corpInfo";
+        return "/registerCorp";
     }
 
     @PostMapping("/registerCorpJson")
     @ResponseBody
-    public BtripResult<Boolean> registerCorp(@RequestParam("corpName") String corpName, @RequestParam("phoneNumber") String phoneNumber, @RequestParam("userName") String userName) {
+    public BtripResult<Boolean> registerCorp(@RequestParam("corpName") String corpName, @RequestParam("userName") String userName) {
+
+        LoginInfo loginInfo = BtripSessionUtils.getLoginInfo();
+        String phoneNumber = loginInfo.getPhoneNumber();
+
         if (StringUtils.isEmpty(corpName) || StringUtils.isEmpty(phoneNumber) || StringUtils.isEmpty(userName)) {
             return BtripResultUtils.returnFailMsg("非法入参");
         }

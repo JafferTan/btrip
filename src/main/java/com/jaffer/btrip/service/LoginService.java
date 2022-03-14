@@ -1,6 +1,6 @@
 package com.jaffer.btrip.service;
 
-import com.jaffer.btrip.beans.entity.LoginInfo;
+import com.jaffer.btrip.beans.entity.LoginUserCorpInfo;
 import com.jaffer.btrip.util.BtripResult;
 
 public interface LoginService {
@@ -11,7 +11,7 @@ public interface LoginService {
      * @param authCode
      * @return
      */
-    BtripResult<LoginInfo> loginByAuthCode(String phoneNumber, String authCode);
+    BtripResult<LoginUserCorpInfo> loginByAuthCode(String phoneNumber, String authCode);
 
 
     /**

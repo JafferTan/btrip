@@ -1,6 +1,6 @@
 package com.jaffer.btrip.service.impl;
 
-import com.jaffer.btrip.beans.entity.LoginInfo;
+import com.jaffer.btrip.beans.entity.LoginUserCorpInfo;
 import com.jaffer.btrip.beans.entity.UserCorpsVO;
 import com.jaffer.btrip.manager.CorpManager;
 import com.jaffer.btrip.manager.UserManager;
@@ -32,7 +32,7 @@ public class LoginServiceImpl implements LoginService {
 
     private static final String GET_AUTH_CODE_BY_PHONE_NUMBER = "GET_AUTH_CODE_BY_PHONE_NUMBER_%s";
     @Override
-    public BtripResult<LoginInfo> loginByAuthCode(String phoneNumber, String authCode) {
+    public BtripResult<LoginUserCorpInfo> loginByAuthCode(String phoneNumber, String authCode) {
         try {
             UserRegexValidUtil.validPhoneNumber(phoneNumber);
 
@@ -52,9 +52,9 @@ public class LoginServiceImpl implements LoginService {
             if (CollectionUtils.isEmpty(userCorpListByPhoneNumber)) {
                 return BtripResultUtils.returnFailMsg("用户不存在");
             }
-            LoginInfo loginInfo = new LoginInfo();
-            loginInfo.setCorpVOList(userCorpListByPhoneNumber);
-            return BtripResultUtils.returnSuccess(loginInfo);
+            LoginUserCorpInfo loginUserCorpInfo = new LoginUserCorpInfo();
+            loginUserCorpInfo.setCorpVOList(userCorpListByPhoneNumber);
+            return BtripResultUtils.returnSuccess(loginUserCorpInfo);
         } catch (Exception e) {
             log.error("loginByAuthCode fail, phoneNumber:{}", phoneNumber,e);
             return BtripResultUtils.returnFailMsg("获取验证码失败，失败原因:" + e.getMessage());
