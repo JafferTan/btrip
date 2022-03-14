@@ -1,4 +1,4 @@
-package com.jaffer.btrip.message;
+package com.jaffer.btrip.service;
 
 import com.jaffer.btrip.util.BtripResult;
 
@@ -12,7 +12,8 @@ public interface MessageService {
      * 发送短信服务
      * @param phoneNumber
      * @param templateMap
+     * @param templateCode
      * @return
      */
-    BtripResult<Boolean> sendMobileMessage(String phoneNumber, Map<String, Object> templateMap);
+    BtripResult<Boolean> sendMobileMessage(String phoneNumber, Map<String, Object> templateMap, String templateCode);
 }
