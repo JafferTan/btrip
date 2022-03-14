@@ -1,5 +1,7 @@
 package com.jaffer.btrip.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Maps;
 import com.jaffer.btrip.beans.entity.UserMaintainRQ;
 import com.jaffer.btrip.beans.entity.UserPO;
 import com.jaffer.btrip.manager.UserManager;
@@ -11,6 +13,8 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Service
@@ -61,5 +65,25 @@ public class UserServiceImpl implements UserService {
             log.error("deleteUserByUserId fail, corpId：{}, userId:{}",corpId,userId, e);
             return BtripResultUtils.returnFailMsg("删除用户失败,失败原因:"  + e.getMessage());
         }
+    }
+
+    @Override
+    public BtripResult<Map<String, String>> getUserPhoneNumber(String corpId, List<String> userIds) {
+
+        try {
+            Map<String,String> phoneMap = Maps.newHashMap();
+            List<UserPO> userByUserIdList = userManager.getUserByUserIdList(corpId, userIds);
+
+            for (UserPO userPO : userByUserIdList) {
+                phoneMap.put(userPO.getUserId(), userPO.getPhone());
+            }
+
+            return BtripResultUtils.returnSuccess(phoneMap);
+
+        } catch (Exception e) {
+            log.error("getUserPhoneNumber fail, corpId:{}, userIds:{}", corpId, JSON.toJSONString(userIds), e);
+            return BtripResultUtils.returnFailMsg("获取用户手机号失败,失败原因:" + e.getMessage());
+        }
+
     }
 }

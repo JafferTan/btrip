@@ -4,6 +4,9 @@ import com.jaffer.btrip.beans.entity.UserMaintainRQ;
 import com.jaffer.btrip.beans.entity.UserPO;
 import com.jaffer.btrip.util.BtripResult;
 
+import java.util.List;
+import java.util.Map;
+
 public interface UserService {
     /**
      * 创建或编辑部门人员
@@ -27,5 +30,14 @@ public interface UserService {
      * @return
      */
     BtripResult<Boolean> deleteUserByUserId(String corpId, String userId);
+
+
+    /**
+     * 获取用户的手机号
+     * @param corpId
+     * @param userIds
+     * @return key:userId, value:对应的手机号
+     */
+    BtripResult<Map<String,String>> getUserPhoneNumber(String corpId, List<String> userIds);
 
 }

@@ -11,11 +11,14 @@ import com.jaffer.btrip.util.BtripResultUtils;
 import com.jaffer.btrip.util.RedisLockUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.BooleanUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -97,6 +100,32 @@ public class DeptServiceImpl implements DeptService {
             return BtripResultUtils.returnFailMsg("查询的部门失败,失败原因:" + e.getMessage());
         } finally {
             RedisLockUtils.releaseLock(lockKey);
+        }
+    }
+
+
+    @Override
+    public BtripResult<Set<String>> getDeptManagerIds(String corpId, Long deptId) {
+        try {
+
+            DeptPO dept = deptManager.getDeptByDeptId(corpId, deptId);
+            if (Objects.isNull(dept)) {
+                return BtripResultUtils.returnFailMsg("部门不存在");
+            }
+
+            Set<String> managerIdSet = new HashSet<>();
+            String managerIds = dept.getManagerIds();
+            if (!StringUtils.isEmpty(managerIds)) {
+                String[] split = StringUtils.split(managerIds, "|");
+                for (String s : split) {
+                    boolean add = managerIdSet.add(s);
+                }
+            }
+
+            return BtripResultUtils.returnSuccess(managerIdSet);
+        } catch (Exception e) {
+            log.error("getDeptManagerIds fail, corpId:{}, deptId:{}", corpId, deptId);
+            return BtripResultUtils.returnFailMsg("获取部门主管信息异常,异常原因: " + e.getMessage());
         }
     }
 }

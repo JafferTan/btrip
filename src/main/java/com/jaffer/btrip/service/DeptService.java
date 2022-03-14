@@ -4,6 +4,9 @@ import com.jaffer.btrip.beans.entity.DeptMaintainRQ;
 import com.jaffer.btrip.beans.entity.DeptPO;
 import com.jaffer.btrip.util.BtripResult;
 
+import java.util.Map;
+import java.util.Set;
+
 public interface DeptService {
 
     /**
@@ -28,5 +31,14 @@ public interface DeptService {
      * @return
      */
     BtripResult<Boolean> deleteDept(String corpId, Long deptId);
+
+
+    /**
+     * 获取一个部门的主管ids
+     * @param corpId
+     * @param deptId
+     * @return
+     */
+    BtripResult<Set<String>> getDeptManagerIds(String corpId, Long deptId);
 
 }

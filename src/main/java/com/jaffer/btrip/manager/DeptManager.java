@@ -18,6 +18,8 @@ import org.springframework.util.CollectionUtils;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+
 @Component
 public class DeptManager {
 
@@ -118,4 +120,5 @@ public class DeptManager {
         }
         return true;
     }
+
 }
