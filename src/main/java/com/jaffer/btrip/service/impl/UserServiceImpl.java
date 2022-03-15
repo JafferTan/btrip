@@ -37,8 +37,8 @@ public class UserServiceImpl implements UserService {
             }
             return BtripResultUtils.returnSuccess(true);
         } catch (Exception e) {
-            log.error("createOrEditUser fail, rq：{}",rq, e);
-            return BtripResultUtils.returnFailMsg("维护部门人员信息失败,失败原因:"  + e.getMessage());
+            log.error("createOrEditUser fail, rq：{}", rq, e);
+            return BtripResultUtils.returnFailMsg("维护部门人员信息失败,失败原因:" + e.getMessage());
         }
 
     }
@@ -52,8 +52,8 @@ public class UserServiceImpl implements UserService {
             }
             return BtripResultUtils.returnSuccess(userByUserId);
         } catch (Exception e) {
-            log.error("createOrEditUser fail, corpId：{}, userId:{}",corpId,userId, e);
-            return BtripResultUtils.returnFailMsg("维护部门人员信息失败,失败原因:"  + e.getMessage());
+            log.error("createOrEditUser fail, corpId：{}, userId:{}", corpId, userId, e);
+            return BtripResultUtils.returnFailMsg("维护部门人员信息失败,失败原因:" + e.getMessage());
         }
     }
 
@@ -65,8 +65,8 @@ public class UserServiceImpl implements UserService {
             return BtripResultUtils.returnSuccess(true);
 
         } catch (Exception e) {
-            log.error("deleteUserByUserId fail, corpId：{}, userId:{}",corpId,userId, e);
-            return BtripResultUtils.returnFailMsg("删除用户失败,失败原因:"  + e.getMessage());
+            log.error("deleteUserByUserId fail, corpId：{}, userId:{}", corpId, userId, e);
+            return BtripResultUtils.returnFailMsg("删除用户失败,失败原因:" + e.getMessage());
         }
     }
 
@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
     public BtripResult<Map<String, String>> getUserPhoneNumber(String corpId, List<String> userIds) {
 
         try {
-            Map<String,String> phoneMap = Maps.newHashMap();
+            Map<String, String> phoneMap = Maps.newHashMap();
             List<UserPO> userByUserIdList = userManager.findUsersByUserIdList(corpId, userIds);
 
             for (UserPO userPO : userByUserIdList) {

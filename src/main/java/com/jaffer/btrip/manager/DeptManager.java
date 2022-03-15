@@ -23,6 +23,7 @@ public class DeptManager {
 
     @Autowired
     private DeptServiceHelper deptServiceHelper;
+
     /**
      * 创建部门
      *
@@ -108,6 +109,7 @@ public class DeptManager {
 
     /**
      * 根据mask获取的是这个部门的所有子部门，包括1级2级3级子部门
+     *
      * @param corpId
      * @param mask
      * @return
@@ -118,7 +120,15 @@ public class DeptManager {
     }
 
     @Transactional
-    public Boolean logicDeleteDepts(String corpId, List<Long> deptList) {
+    public Boolean logicDeleteDepts(String corpId, List<Long> deptList, Long pid) {
+
+        if (!Objects.equals(pid, BtripSpecialDeptEnum.ROOT_DEPT.getDeptId())) {
+            DeptPO parentDept = this.getDeptByDeptId(corpId, pid);
+            Integer newCount = parentDept.getSubDeptCount() - 1;
+            parentDept.setSubDeptCount(newCount);
+            deptPOMapper.updateByPrimaryKeySelective(parentDept);
+        }
+
         DeptPOExample deptPOExample = new DeptPOExample();
         DeptPOExample.Criteria criteria = deptPOExample.createCriteria().andCorpIdEqualTo(corpId).andIdIn(deptList);
         DeptPO deptPO = new DeptPO();

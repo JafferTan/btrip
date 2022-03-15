@@ -94,7 +94,7 @@ public class DeptServiceImpl implements DeptService {
             if (userNumber != 0) {
                 return BtripResultUtils.returnFailMsg("部门人数大于0,不能删除");
             }
-            deptManager.logicDeleteDepts(corpId, subDeptIds);
+            deptManager.logicDeleteDepts(corpId, subDeptIds, dept.getDeptPid());
             return BtripResultUtils.returnSuccess(true);
         } catch (Exception e) {
             log.error("deleteDept fail, corpId:{}, deptId:{}", corpId, deptId, e);
