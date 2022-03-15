@@ -764,6 +764,66 @@ public class DeptPOExample {
             addCriterion("status not between", value1, value2, "status");
             return (Criteria) this;
         }
+
+        public Criteria andSubDeptCountIsNull() {
+            addCriterion("sub_dept_count is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubDeptCountIsNotNull() {
+            addCriterion("sub_dept_count is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubDeptCountEqualTo(Integer value) {
+            addCriterion("sub_dept_count =", value, "subDeptCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubDeptCountNotEqualTo(Integer value) {
+            addCriterion("sub_dept_count <>", value, "subDeptCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubDeptCountGreaterThan(Integer value) {
+            addCriterion("sub_dept_count >", value, "subDeptCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubDeptCountGreaterThanOrEqualTo(Integer value) {
+            addCriterion("sub_dept_count >=", value, "subDeptCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubDeptCountLessThan(Integer value) {
+            addCriterion("sub_dept_count <", value, "subDeptCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubDeptCountLessThanOrEqualTo(Integer value) {
+            addCriterion("sub_dept_count <=", value, "subDeptCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubDeptCountIn(List<Integer> values) {
+            addCriterion("sub_dept_count in", values, "subDeptCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubDeptCountNotIn(List<Integer> values) {
+            addCriterion("sub_dept_count not in", values, "subDeptCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubDeptCountBetween(Integer value1, Integer value2) {
+            addCriterion("sub_dept_count between", value1, value2, "subDeptCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubDeptCountNotBetween(Integer value1, Integer value2) {
+            addCriterion("sub_dept_count not between", value1, value2, "subDeptCount");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

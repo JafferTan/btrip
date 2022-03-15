@@ -17,17 +17,15 @@ import java.util.Objects;
 @Slf4j
 public class CorpServiceImpl implements CorpService {
 
-
     private static final String LOCK_KEY_REGISTER_CORP = "LOCK_KEY_REGISTER_CORP_%s";
 
     private static final String LOCK_KEY_MAINTAIN_CORP = "LOCK_KEY_MAINTAIN_CORP_%s";
-
 
     @Resource
     private CorpManager corpManager;
 
     @Override
-    public BtripResult<Boolean> registerCorp(String corpName, String phoneNumber, String userName) {
+    public BtripResult<String> registerCorp(String corpName, String phoneNumber, String userName) {
         String lockKey = String.format(LOCK_KEY_REGISTER_CORP, corpName);
         try {
             boolean lock = RedisLockUtils.tryLock(lockKey);
@@ -35,11 +33,8 @@ public class CorpServiceImpl implements CorpService {
                 return BtripResultUtils.returnFailMsg("重复注册，请稍后重试");
             }
 
-            Boolean registerCorp = corpManager.registerCorp(corpName, phoneNumber, userName);
-            if (BooleanUtils.isFalse(registerCorp)) {
-                return BtripResultUtils.returnFailMsg("创建企业失败");
-            }
-            return BtripResultUtils.returnSuccess(true);
+            String corpId = corpManager.registerCorp(corpName, phoneNumber, userName);
+            return BtripResultUtils.returnSuccess(corpId);
         } catch (Exception e) {
             log.error("registerCorp error, corpName:{}, phoneNumber:{}, userName:{}", corpName, phoneNumber, userName,e);
             return BtripResultUtils.returnFailMsg("创建企业失败,失败原因 :" + e.getMessage());

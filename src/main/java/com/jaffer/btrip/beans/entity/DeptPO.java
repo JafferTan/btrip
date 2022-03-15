@@ -23,6 +23,8 @@ public class DeptPO {
 
     private String status;
 
+    private Integer subDeptCount;
+
     public Long getId() {
         return id;
     }
@@ -101,5 +103,13 @@ public class DeptPO {
 
     public void setStatus(String status) {
         this.status = status == null ? null : status.trim();
+    }
+
+    public Integer getSubDeptCount() {
+        return subDeptCount;
+    }
+
+    public void setSubDeptCount(Integer subDeptCount) {
+        this.subDeptCount = subDeptCount;
     }
 }

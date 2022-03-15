@@ -11,7 +11,7 @@ public interface CorpService {
      * @param userName
      * @return
      */
-    BtripResult<Boolean> registerCorp(String corpName, String phoneNumber, String userName);
+    BtripResult<String> registerCorp(String corpName, String phoneNumber, String userName);
 
     /**
      * 获取企业详情

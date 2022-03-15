@@ -2,6 +2,7 @@ package com.jaffer.btrip.service.impl;
 
 import com.jaffer.btrip.beans.entity.DeptMaintainRQ;
 import com.jaffer.btrip.beans.entity.DeptPO;
+import com.jaffer.btrip.beans.entity.SubDeptVO;
 import com.jaffer.btrip.enums.BtripSpecialDeptEnum;
 import com.jaffer.btrip.manager.DeptManager;
 import com.jaffer.btrip.manager.UserManager;
@@ -126,6 +127,18 @@ public class DeptServiceImpl implements DeptService {
         } catch (Exception e) {
             log.error("getDeptManagerIds fail, corpId:{}, deptId:{}", corpId, deptId);
             return BtripResultUtils.returnFailMsg("获取部门主管信息异常,异常原因: " + e.getMessage());
+        }
+    }
+
+
+    @Override
+    public BtripResult<SubDeptVO> getSubDeptDetail(String corpId, Long deptId) {
+        try {
+            SubDeptVO subDeptDetail = deptManager.getSubDeptDetail(corpId, deptId);
+            return BtripResultUtils.returnSuccess(subDeptDetail);
+        } catch (Exception e) {
+            log.error("getDeptSubDeptDetail fail, corpId:{}, deptId:{}", corpId, deptId);
+            return BtripResultUtils.returnFailMsg("获取子部门信息异常,异常原因: " + e.getMessage());
         }
     }
 }

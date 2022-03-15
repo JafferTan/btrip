@@ -1,9 +1,14 @@
 package com.jaffer.btrip.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.jaffer.btrip.beans.entity.CorpPO;
 import com.jaffer.btrip.beans.entity.LoginInfo;
 import com.jaffer.btrip.beans.entity.LoginUserCorpInfo;
+import com.jaffer.btrip.beans.entity.UserPO;
+import com.jaffer.btrip.exception.BizException;
+import com.jaffer.btrip.service.CorpService;
 import com.jaffer.btrip.service.LoginService;
+import com.jaffer.btrip.service.UserService;
 import com.jaffer.btrip.util.BtripResult;
 import com.jaffer.btrip.util.BtripSessionUtils;
 import com.jaffer.btrip.util.RedisUtils;
@@ -32,6 +37,11 @@ public class LoginController {
     @Autowired
     private LoginService loginService;
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private CorpService corpService;
 
     @GetMapping(value = "/login")
     public String helloWorld() {
@@ -100,30 +110,47 @@ public class LoginController {
 
     @PostMapping("/selectUserCorpJson")
     @ResponseBody
-    public ModelAndView selectUserCorp(ModelAndView modelAndView, @RequestParam("corpId") String corpId, @RequestParam("userId") String userId, @RequestParam("corpName") String corpName) {
-        LoginInfo loginInfo = BtripSessionUtils.getLoginInfo();
-        loginInfo.setUserId(userId);
-        loginInfo.setCorpId(corpId);
-        loginInfo.setCorpName(corpName);
-        Map<String, Object> model = modelAndView.getModel();
+    public ModelAndView selectUserCorp(ModelAndView modelAndView, @RequestParam("corpId") String corpId) {
 
-        model.put("loginInfo", loginInfo);
-        modelAndView.setViewName("/home");
-        return modelAndView;
+        LoginInfo loginInfo = BtripSessionUtils.getLoginInfo();
+        Map<String, Object> model = modelAndView.getModel();
+        String phoneNumber = loginInfo.getPhoneNumber();
+        try {
+            BtripResult<CorpPO> corpRes = corpService.getCorpDetailByCorpId(corpId);
+            if (corpRes == null || BooleanUtils.isFalse(corpRes.getSuccess())) {
+                throw new BizException("企业不存在");
+            }
+            CorpPO corp = corpRes.getModule();
+            BtripResult<UserPO> userRes = userService.getUserDetailByPhoneNumber(corpId, phoneNumber);
+            if (userRes == null || BooleanUtils.isFalse(userRes.getSuccess())) {
+                throw new BizException("用户不存在");
+            }
+            UserPO user = userRes.getModule();
+
+            loginInfo.setCorpName(corp.getCorpName());
+            loginInfo.setUserId(user.getUserId());
+            loginInfo.setUserName(user.getUserName());
+            loginInfo.setCorpId(corpId);
+            BtripSessionUtils.setLoginInfo(loginInfo);
+            model.put("loginInfo", loginInfo);
+            modelAndView.setViewName("/index");
+            return modelAndView;
+        } catch (Exception e) {
+            log.error("selectUserCorp occurred exception, corpId:{}, phoneNumber:{}", corpId, phoneNumber, e);
+            model.put("failReason", "登陆失败,失败原因:" + e.getMessage());
+            modelAndView.setViewName("/login");
+            return modelAndView;
+        }
     }
 
     @PostMapping("/loginOutJson")
     public String loginOut(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        String id = session.getId();
         try {
             session.invalidate();
-            Jedis jedis = RedisUtils.getJedis();
-            assert jedis != null;
-            jedis.del(String.format(LOGIN_SESSION, id));
             return "/login";
         } catch (Exception e) {
-            log.error("loginOut fail, sessionId:{}",id, e);
+            log.error("loginOut fail, sessionId:{}",session.getId(), e);
             return "/login";
         }
     }

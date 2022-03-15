@@ -50,7 +50,7 @@ public class CorpManager {
      * @return
      */
     @Transactional
-    public Boolean registerCorp(String corpName, String phoneNumber, String userName){
+    public String registerCorp(String corpName, String phoneNumber, String userName){
         CorpPO corpPO = corpServiceHelper.buildCorpPO(corpName);
         int insertCorpRes = corpPOMapper.insert(corpPO);
         if (insertCorpRes < 1) {
@@ -69,7 +69,7 @@ public class CorpManager {
             throw new BizException("插入超级管理员失败");
         }
 
-        return true;
+        return corpAdminPO.getCorpId();
     }
 
     public CorpPO getCorpDetailByCorpId(String corpId) {

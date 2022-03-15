@@ -116,7 +116,7 @@ public class UserManager {
     @Transactional
     public Boolean editUser(UserMaintainRQ rq) {
 
-        UserPO userByUserId = this.getUserByUserId(rq.getCorpId(), rq.getUserId());
+        UserPO userByUserId = this.findUserByUserId(rq.getCorpId(), rq.getUserId());
         if (Objects.isNull(userByUserId)) {
             throw new BizException("用户不存在");
         }
@@ -143,7 +143,7 @@ public class UserManager {
      * @param userId
      * @return
      */
-    public UserPO getUserByUserId(String corpId, String userId) {
+    public UserPO findUserByUserId(String corpId, String userId) {
 
         UserPOExample userPOExample = new UserPOExample();
         UserPOExample.Criteria criteria = userPOExample.
@@ -159,7 +159,7 @@ public class UserManager {
     @Transactional
     public Boolean deleteUserByUserId(String corpId, String userId) {
 
-        UserPO userByUserId = getUserByUserId(corpId, userId);
+        UserPO userByUserId = findUserByUserId(corpId, userId);
         if (Objects.isNull(userByUserId)) {
             throw new BizException("该用户不存在");
         }
@@ -185,11 +185,23 @@ public class UserManager {
      * @param userIdList
      * @return
      */
-    public List<UserPO> getUserByUserIdList(String corpId, List<String> userIdList) {
+    public List<UserPO> findUsersByUserIdList(String corpId, List<String> userIdList) {
 
         UserPOExample userPOExample = new UserPOExample();
         UserPOExample.Criteria criteria = userPOExample.
                 createCriteria().andCorpIdEqualTo(corpId).andUserIdIn(userIdList).andStatusEqualTo(RowStatusEnum.NORMAL.getStatus());
+        return userPOMapper.selectByExample(userPOExample);
+    }
+
+    /**
+     * 获取部门员工
+     * @param corpId
+     * @param deptId
+     * @return
+     */
+    public List<UserPO> findDeptStaff(String corpId, Long deptId) {
+        UserPOExample userPOExample = new UserPOExample();
+        UserPOExample.Criteria criteria = userPOExample.createCriteria().andCorpIdEqualTo(corpId).andDeptIdEqualTo(deptId).andStatusEqualTo(RowStatusEnum.NORMAL.getStatus());
         return userPOMapper.selectByExample(userPOExample);
     }
 }

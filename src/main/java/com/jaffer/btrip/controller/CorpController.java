@@ -2,19 +2,25 @@ package com.jaffer.btrip.controller;
 
 import com.jaffer.btrip.beans.entity.CorpPO;
 import com.jaffer.btrip.beans.entity.LoginInfo;
+import com.jaffer.btrip.beans.entity.UserPO;
 import com.jaffer.btrip.service.CorpService;
+import com.jaffer.btrip.service.UserService;
 import com.jaffer.btrip.util.BtripResult;
 import com.jaffer.btrip.util.BtripResultUtils;
 import com.jaffer.btrip.util.BtripSessionUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.Map;
 
 
 @Controller
@@ -24,32 +30,66 @@ public class CorpController {
     @Autowired
     private CorpService corpService;
 
+    @Autowired
+    private UserService userService;
+
     @GetMapping("/registerCorp")
     public String helloWorld() {
         return "/registerCorp";
     }
 
     @PostMapping("/registerCorpJson")
-    @ResponseBody
-    public BtripResult<Boolean> registerCorp(@RequestParam("corpName") String corpName, @RequestParam("userName") String userName) {
+    public ModelAndView registerCorp(@RequestParam("corpName") String corpName, @RequestParam("userName") String userName) {
 
+        ModelAndView modelAndView = new ModelAndView();
+        Map<String, Object> model = modelAndView.getModel();
         LoginInfo loginInfo = BtripSessionUtils.getLoginInfo();
         String phoneNumber = loginInfo.getPhoneNumber();
 
         if (StringUtils.isEmpty(corpName) || StringUtils.isEmpty(phoneNumber) || StringUtils.isEmpty(userName)) {
-            return BtripResultUtils.returnFailMsg("非法入参");
+            model.put("failReason","非法入参");
+            modelAndView.setViewName("/login");
+            return modelAndView;
         }
 
         try {
-            BtripResult<Boolean> result = corpService.registerCorp(corpName, phoneNumber, userName);
+            BtripResult<String> result = corpService.registerCorp(corpName, phoneNumber, userName);
             if (result == null || BooleanUtils.isFalse(result.getSuccess())) {
-                return BtripResultUtils.returnFailMsg("注册企业失败");
+                model.put("failReason","创建企业失败");
+                modelAndView.setViewName("/login");
+                return modelAndView;
             }
-            return result;
+            String corpId = result.getModule();
+            BtripResult<CorpPO> corpDetailByCorpId = corpService.getCorpDetailByCorpId(corpId);
+            if (corpDetailByCorpId == null || BooleanUtils.isFalse(corpDetailByCorpId.getSuccess())) {
+                model.put("failReason","获取企业信息失败");
+                modelAndView.setViewName("/login");
+                return modelAndView;
+            }
+            CorpPO corp = corpDetailByCorpId.getModule();
+            loginInfo.setCorpId(corp.getCorpId());
+            loginInfo.setCorpName(corp.getCorpName());
+
+            BtripResult<UserPO> userDetailByPhoneNumber = userService.getUserDetailByPhoneNumber(corpId, loginInfo.getPhoneNumber());
+            if (userDetailByPhoneNumber == null || BooleanUtils.isFalse(userDetailByPhoneNumber.getSuccess())) {
+                model.put("failReason","获取超级管理信息失败");
+                modelAndView.setViewName("/login");
+                return modelAndView;
+            }
+
+            UserPO user = userDetailByPhoneNumber.getModule();
+            loginInfo.setUserId(user.getUserId());
+            loginInfo.setUserName(user.getUserName());
+            model.put("loginInfo", loginInfo);
+            modelAndView.setViewName("/index");
+            return modelAndView;
         } catch (Exception e) {
             log.error("registerCorp error, corpName:{}, phoneNumber:{}, userName:{}", corpName, phoneNumber, userName,e);
-            return BtripResultUtils.returnFailMsg("注册企业异常,异常原因 :" + e.getMessage());
+            model.put("failReason","创建企业失败");
+            modelAndView.setViewName("/login");
+            return modelAndView;
         }
+
     }
 
     @PostMapping("/getCorpDetailByCorpIdJson")

@@ -64,7 +64,7 @@ public class CorpAdminManager {
             return null;
         }
 
-        UserPO userByUserId = userManager.getUserByUserId(corpId, userId);
+        UserPO userByUserId = userManager.findUserByUserId(corpId, userId);
         return userByUserId;
     }
 
@@ -86,7 +86,7 @@ public class CorpAdminManager {
 
         List<String> corpAdminList = corpAdminPOS.stream().map(CorpAdminPO::getUserId).collect(Collectors.toList());
 
-        return userManager.getUserByUserIdList(corpId, corpAdminList);
+        return userManager.findUsersByUserIdList(corpId, corpAdminList);
     }
 
     /**
@@ -105,7 +105,7 @@ public class CorpAdminManager {
         }
         List<String> collect = corpAdminPOS.stream().map(CorpAdminPO::getUserId).collect(Collectors.toList());
 
-        List<UserPO> userByUserIdList = userManager.getUserByUserIdList(corpId, collect);
+        List<UserPO> userByUserIdList = userManager.findUsersByUserIdList(corpId, collect);
 
         return userByUserIdList;
 
@@ -120,7 +120,7 @@ public class CorpAdminManager {
     @Transactional
     public Boolean changeAdminToSuperAdmin(String corpId, String userId, String oldUserId) {
 
-        UserPO userByUserId = userManager.getUserByUserId(corpId, userId);
+        UserPO userByUserId = userManager.findUserByUserId(corpId, userId);
         if (Objects.isNull(userByUserId)) {
             throw new BizException("该用户不存在,请先创建用户再转让超级管理员权限");
         }
@@ -154,7 +154,7 @@ public class CorpAdminManager {
 
     @Transactional
     public Boolean addCorpAdmin(String corpId, String userId) {
-        UserPO userByUserId = userManager.getUserByUserId(corpId, userId);
+        UserPO userByUserId = userManager.findUserByUserId(corpId, userId);
         if (Objects.isNull(userByUserId)) {
             throw new BizException("该用户不存在,请先创建用户再转让超级管理员权限");
         }
@@ -170,7 +170,7 @@ public class CorpAdminManager {
 
     @Transactional
     public Boolean addCorpSuperAdmin(String corpId, String userId) {
-        UserPO userByUserId = userManager.getUserByUserId(corpId, userId);
+        UserPO userByUserId = userManager.findUserByUserId(corpId, userId);
         if (Objects.isNull(userByUserId)) {
             throw new BizException("该用户不存在,请先创建用户再转让超级管理员权限");
         }
@@ -186,7 +186,7 @@ public class CorpAdminManager {
 
     @Transactional
     public Boolean changeUserToSuperAdmin(String corpId, String userId, String oldUserId) {
-        UserPO userByUserId = userManager.getUserByUserId(corpId, userId);
+        UserPO userByUserId = userManager.findUserByUserId(corpId, userId);
         if (Objects.isNull(userByUserId)) {
             throw new BizException("该用户不存在,请先创建用户再转让超级管理员权限");
         }

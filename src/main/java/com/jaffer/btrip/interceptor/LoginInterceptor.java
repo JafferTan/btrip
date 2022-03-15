@@ -28,16 +28,7 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         try {
-            HttpSession session = request.getSession();
-            Jedis jedis = RedisUtils.getJedis();
-            String sessionRedis = String.format(LOGIN_SESSION, session.getId());
-            assert jedis != null;
-            boolean exists = jedis.exists(sessionRedis);
-            if (BooleanUtils.isFalse(exists)) {
-                response.sendRedirect("/login");
-                return false;
-            }
-            LoginInfo loginInfo = JSON.parseObject(jedis.get(sessionRedis), LoginInfo.class);
+            LoginInfo loginInfo = (LoginInfo) request.getSession().getAttribute("loginInfo");
             if (!Objects.isNull(loginInfo)) {
                 return true;
             }

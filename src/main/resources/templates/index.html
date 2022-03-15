@@ -6,16 +6,26 @@
 </head>
 <body>
 <div>
-    corpId : <span th:text = "${loginInfo.corpId}"></span>
-</div>
-<div>
-    userId : <span th:text = "${loginInfo.userId}"></span>
-</div>
-<div>
-    phoneNumber : <span th:text = "${loginInfo.phoneNumber}"></span>
+    企业id : <span th:text = "${loginInfo.corpId}"></span>
 </div>
 
-欢迎登陆首页！
+<div>
+    企业名称 : <span th:text = "${loginInfo.corpName}"></span>
+</div>
+
+<div>
+    用户id : <span th:text = "${loginInfo.userId}"></span>
+</div>
+
+<div>
+    用户名称 : <span th:text = "${loginInfo.userName}"></span>
+</div>
+
+<div>
+    手机号 : <span th:text = "${loginInfo.phoneNumber}"></span>
+</div>
+
+<a href="/deptInfo">部门与人员</a>
 <form action="/loginOutJson" method="post">
     <button type="submit">登出</button>
 </form>
