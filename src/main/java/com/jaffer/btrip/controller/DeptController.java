@@ -26,6 +26,7 @@ import java.util.Objects;
 @Controller
 @Slf4j
 public class DeptController {
+
     @Autowired
     private DeptService deptService;
 
@@ -71,9 +72,7 @@ public class DeptController {
             if (result == null || BooleanUtils.isFalse(result.getSuccess())) {
                 return BtripResultUtils.returnFailMsg("维护部门信息失败，失败原因" + result.getErrorMsg());
             }
-            request.getRequestDispatcher("/deptInfo").forward(request, response);
             return result;
-
         } catch (Exception e) {
             log.error("createOrEditDept error, deptMaintainRQ:{}", deptMaintainRQ, e);
             return BtripResultUtils.returnFailMsg("维护部门信息异常,异常原因 :" + e.getMessage());

@@ -69,7 +69,6 @@ public class LoginServiceImpl implements LoginService {
 
             Jedis jedis = RedisUtils.getJedis();
             String key = String.format(GET_AUTH_CODE_BY_PHONE_NUMBER, phoneNumber);
-            assert jedis != null;
             boolean exists = jedis.exists(key);
             if (BooleanUtils.isFalse(exists)) {
                 String authCode = StringUtils.leftPad(new Random().nextInt(10000) + "", 4, "0");

@@ -23,7 +23,6 @@ public class RedisLockUtils {
     public static boolean tryLock(String key) {
 
         Jedis jedis = RedisUtils.getJedis();
-        assert jedis != null;
         boolean exists = jedis.exists(key);
 
         if (BooleanUtils.isTrue(exists)) {
@@ -41,7 +40,6 @@ public class RedisLockUtils {
      */
     public static void releaseLock(String key) {
         Jedis jedis = RedisUtils.getJedis();
-        assert jedis != null;
         jedis.del(key);
     }
 }

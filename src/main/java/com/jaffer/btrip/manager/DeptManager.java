@@ -141,6 +141,12 @@ public class DeptManager {
     }
 
 
+    /**
+     * 获取一级子部门的信息,相应的信息有所省略防止数据过大传输给前端
+     * @param corpId
+     * @param deptId
+     * @return
+     */
     public SubDeptVO getSubDeptDetail(String corpId, Long deptId) {
         SubDeptVO res = new SubDeptVO();
         res.setDeptId(deptId);

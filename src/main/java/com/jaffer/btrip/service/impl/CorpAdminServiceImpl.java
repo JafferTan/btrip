@@ -1,5 +1,6 @@
 package com.jaffer.btrip.service.impl;
 
+import com.jaffer.btrip.beans.entity.LoginInfo;
 import com.jaffer.btrip.beans.entity.UserPO;
 import com.jaffer.btrip.manager.CorpAdminManager;
 import com.jaffer.btrip.manager.UserManager;
