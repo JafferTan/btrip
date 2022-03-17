@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>维护部门信息</title>
+</head>
+<body>
+    <form action="/createOrEditDeptJson" method="post">
+        <p>部门名称: <input type="text" name="deptName"></p>
+        <p>主管信息: <input type="text" name="managerIds"></p>
+        <p>父部门id: <input type="text" name="deptPid"></p>
+        <button type="submit">创建部门</button>
+    </form>
+    <br>
+
+    <form action="/createOrEditDeptJson" method="post">
+        <p>部门id: <input type="text" name="deptId"></p>
+        <p>部门名称: <input type="text" name="deptName"></p>
+        <p>主管信息: <input type="text" name="managerIds"></p>
+        <button type="submit">编辑部门</button>
+    </form>
+
+</body>
+</html>

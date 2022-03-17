@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jaffer.btrip.mapper.TripStandardPOMapper">
+  <resultMap id="BaseResultMap" type="com.jaffer.btrip.beans.entity.TripStandardPO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="trip_standard_name" jdbcType="VARCHAR" property="tripStandardName" />
+    <result column="flight_limit" jdbcType="VARCHAR" property="flightLimit" />
+    <result column="train_limit" jdbcType="VARCHAR" property="trainLimit" />
+    <result column="hotel_limit" jdbcType="VARCHAR" property="hotelLimit" />
+    <result column="corp_id" jdbcType="VARCHAR" property="corpId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, gmt_create, gmt_modified, status, trip_standard_name, flight_limit, train_limit, 
+    hotel_limit, corp_id
+  </sql>
+  <select id="selectByExample" parameterType="com.jaffer.btrip.beans.entity.TripStandardPOExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from btrip_standard_setting
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from btrip_standard_setting
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from btrip_standard_setting
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jaffer.btrip.beans.entity.TripStandardPOExample">
+    delete from btrip_standard_setting
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jaffer.btrip.beans.entity.TripStandardPO">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into btrip_standard_setting (gmt_create, gmt_modified, status, 
+      trip_standard_name, flight_limit, train_limit, 
+      hotel_limit, corp_id)
+    values (#{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR}, 
+      #{tripStandardName,jdbcType=VARCHAR}, #{flightLimit,jdbcType=VARCHAR}, #{trainLimit,jdbcType=VARCHAR}, 
+      #{hotelLimit,jdbcType=VARCHAR}, #{corpId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jaffer.btrip.beans.entity.TripStandardPO">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into btrip_standard_setting
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="tripStandardName != null">
+        trip_standard_name,
+      </if>
+      <if test="flightLimit != null">
+        flight_limit,
+      </if>
+      <if test="trainLimit != null">
+        train_limit,
+      </if>
+      <if test="hotelLimit != null">
+        hotel_limit,
+      </if>
+      <if test="corpId != null">
+        corp_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="tripStandardName != null">
+        #{tripStandardName,jdbcType=VARCHAR},
+      </if>
+      <if test="flightLimit != null">
+        #{flightLimit,jdbcType=VARCHAR},
+      </if>
+      <if test="trainLimit != null">
+        #{trainLimit,jdbcType=VARCHAR},
+      </if>
+      <if test="hotelLimit != null">
+        #{hotelLimit,jdbcType=VARCHAR},
+      </if>
+      <if test="corpId != null">
+        #{corpId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jaffer.btrip.beans.entity.TripStandardPOExample" resultType="java.lang.Long">
+    select count(*) from btrip_standard_setting
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update btrip_standard_setting
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.gmtCreate != null">
+        gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.gmtModified != null">
+        gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tripStandardName != null">
+        trip_standard_name = #{record.tripStandardName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.flightLimit != null">
+        flight_limit = #{record.flightLimit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.trainLimit != null">
+        train_limit = #{record.trainLimit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hotelLimit != null">
+        hotel_limit = #{record.hotelLimit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.corpId != null">
+        corp_id = #{record.corpId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update btrip_standard_setting
+    set id = #{record.id,jdbcType=BIGINT},
+      gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
+      status = #{record.status,jdbcType=VARCHAR},
+      trip_standard_name = #{record.tripStandardName,jdbcType=VARCHAR},
+      flight_limit = #{record.flightLimit,jdbcType=VARCHAR},
+      train_limit = #{record.trainLimit,jdbcType=VARCHAR},
+      hotel_limit = #{record.hotelLimit,jdbcType=VARCHAR},
+      corp_id = #{record.corpId,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jaffer.btrip.beans.entity.TripStandardPO">
+    update btrip_standard_setting
+    <set>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="tripStandardName != null">
+        trip_standard_name = #{tripStandardName,jdbcType=VARCHAR},
+      </if>
+      <if test="flightLimit != null">
+        flight_limit = #{flightLimit,jdbcType=VARCHAR},
+      </if>
+      <if test="trainLimit != null">
+        train_limit = #{trainLimit,jdbcType=VARCHAR},
+      </if>
+      <if test="hotelLimit != null">
+        hotel_limit = #{hotelLimit,jdbcType=VARCHAR},
+      </if>
+      <if test="corpId != null">
+        corp_id = #{corpId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jaffer.btrip.beans.entity.TripStandardPO">
+    update btrip_standard_setting
+    set gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=VARCHAR},
+      trip_standard_name = #{tripStandardName,jdbcType=VARCHAR},
+      flight_limit = #{flightLimit,jdbcType=VARCHAR},
+      train_limit = #{trainLimit,jdbcType=VARCHAR},
+      hotel_limit = #{hotelLimit,jdbcType=VARCHAR},
+      corp_id = #{corpId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

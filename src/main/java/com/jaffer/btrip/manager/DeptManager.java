@@ -119,9 +119,18 @@ public class DeptManager {
         return subDeptIdsByMask;
     }
 
+
+    /**
+     * 删除部门，会把部门树的所有的节点设置为删除状态，父部门的相应子部门计数减少
+     * @param corpId
+     * @param deptList
+     * @param pid
+     * @return
+     */
     @Transactional
     public Boolean logicDeleteDepts(String corpId, List<Long> deptList, Long pid) {
 
+        //将父部门的直接子部门数量获取
         if (!Objects.equals(pid, BtripSpecialDeptEnum.ROOT_DEPT.getDeptId())) {
             DeptPO parentDept = this.getDeptByDeptId(corpId, pid);
             Integer newCount = parentDept.getSubDeptCount() - 1;
@@ -171,4 +180,8 @@ public class DeptManager {
 
         return res;
     }
+
+
+
+
 }
