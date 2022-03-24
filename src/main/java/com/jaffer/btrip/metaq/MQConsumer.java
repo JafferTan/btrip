@@ -7,36 +7,69 @@ import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
 import org.apache.rocketmq.common.message.MessageExt;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Objects;
 
-public class MQConsumer {
-    public static String add = "101.33.236.202:9876";
-    public static void main(String[] args) {
-        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("alibaba");
-        consumer.setNamesrvAddr(add);
-        try{
+@Component
+public class MQConsumer implements BtripConsumer {
+
+    @Value("${spring.application.name}")
+    private String producerGroup;
+
+    @Value("${rocketmq.name-server}")
+    private String nameSrvAddr;
+
+    private DefaultMQPushConsumer consumer = null;
+
+
+    @Override
+    @PostConstruct
+    public void init() {
+        try {
+            consumer = new DefaultMQPushConsumer(producerGroup);
+            consumer.setNamesrvAddr(nameSrvAddr);
             consumer.subscribe("topicForTest", "*");
             consumer.registerMessageListener(new MessageListenerConcurrently() {
                 @Override
                 public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> list, ConsumeConcurrentlyContext consumeConcurrentlyContext) {
                     try {
-                        for (MessageExt messageExt : list) {
-                            System.out.println(JSON.toJSONString(messageExt));
-                        }
+                        MessageExt messageExt = list.get(0);
+                        return processMsg(messageExt);
                     } catch (Exception e){
                         e.printStackTrace();
                     }
                     return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
                 }
             });
-            long l = System.currentTimeMillis();
-            System.out.println(l);
             consumer.start();
-            System.out.println("开始消费");
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
+        }
+    }
+
+    @Override
+    public ConsumeConcurrentlyStatus processMsg(MessageExt msg) {
+        try {
+            String bodyString = new String(msg.getBody(), StandardCharsets.UTF_8);
+            String s = JSON.parseObject(bodyString, String.class);
+            System.out.println(s);
+        } catch (Exception e) {
+          e.printStackTrace();
+          return ConsumeConcurrentlyStatus.RECONSUME_LATER;
+        }
+        return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
+    }
+
+    @Override
+    @PreDestroy
+    public void destroy() {
+        if (Objects.nonNull(consumer)) {
             consumer.shutdown();
         }
     }

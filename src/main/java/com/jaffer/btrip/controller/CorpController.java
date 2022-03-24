@@ -22,7 +22,6 @@ import java.util.Map;
 
 @Controller
 @Slf4j
-@RequestMapping("registerCorp")
 public class CorpController {
 
     @Autowired
@@ -41,7 +40,7 @@ public class CorpController {
 
         if (StringUtils.isEmpty(corpName) || StringUtils.isEmpty(phoneNumber) || StringUtils.isEmpty(userName)) {
             model.put("failReason","非法入参");
-            modelAndView.setViewName("/login");
+            modelAndView.setViewName("login");
             return modelAndView;
         }
 
@@ -49,14 +48,14 @@ public class CorpController {
             BtripResult<String> result = corpService.registerCorp(corpName, phoneNumber, userName);
             if (result == null || BooleanUtils.isFalse(result.getSuccess())) {
                 model.put("failReason","创建企业失败");
-                modelAndView.setViewName("/login");
+                modelAndView.setViewName("login");
                 return modelAndView;
             }
             String corpId = result.getModule();
             BtripResult<CorpPO> corpDetailByCorpId = corpService.getCorpDetailByCorpId(corpId);
             if (corpDetailByCorpId == null || BooleanUtils.isFalse(corpDetailByCorpId.getSuccess())) {
                 model.put("failReason","获取企业信息失败");
-                modelAndView.setViewName("/login");
+                modelAndView.setViewName("login");
                 return modelAndView;
             }
             CorpPO corp = corpDetailByCorpId.getModule();
@@ -66,7 +65,7 @@ public class CorpController {
             BtripResult<UserPO> userDetailByPhoneNumber = userService.getUserDetailByPhoneNumber(corpId, loginInfo.getPhoneNumber());
             if (userDetailByPhoneNumber == null || BooleanUtils.isFalse(userDetailByPhoneNumber.getSuccess())) {
                 model.put("failReason","获取超级管理信息失败");
-                modelAndView.setViewName("/login");
+                modelAndView.setViewName("login");
                 return modelAndView;
             }
 
@@ -74,12 +73,12 @@ public class CorpController {
             loginInfo.setUserId(user.getUserId());
             loginInfo.setUserName(user.getUserName());
             model.put("loginInfo", loginInfo);
-            modelAndView.setViewName("/index");
+            modelAndView.setViewName("index");
             return modelAndView;
         } catch (Exception e) {
             log.error("registerCorp error, corpName:{}, phoneNumber:{}, userName:{}", corpName, phoneNumber, userName,e);
             model.put("failReason","创建企业失败");
-            modelAndView.setViewName("/login");
+            modelAndView.setViewName("login");
             return modelAndView;
         }
 

@@ -56,7 +56,7 @@ public class LoginController {
             BtripResult<LoginUserCorpInfo> result = loginService.loginByAuthCode(phoneNumber, authCode);
             if (result == null || BooleanUtils.isFalse(result.getSuccess())) {
                 model.put("failReason", "登陆失败");
-                modelAndView.setViewName("/login");
+                modelAndView.setViewName("login");
                 return modelAndView;
             }
 
@@ -65,12 +65,12 @@ public class LoginController {
             loginInfo.setPhoneNumber(phoneNumber);
             BtripSessionUtils.setLoginInfo(loginInfo);
             model.put("corpList", JSON.toJSONString(module));
-            modelAndView.setViewName("/loginSelectCorp");
+            modelAndView.setViewName("loginSelectCorp");
             return modelAndView;
         } catch (Exception e) {
             log.error("login fail, phoneNumber:{}, authCode:{}",phoneNumber, authCode, e);
             model.put("failReason", "出现异常，异常原因:" + e.getMessage());
-            modelAndView.setViewName("/login");
+            modelAndView.setViewName("login");
             return modelAndView;
         }
     }
@@ -92,16 +92,16 @@ public class LoginController {
             BtripResult<Boolean> result = loginService.getAuthCode(phoneNumber);
             if (result == null || BooleanUtils.isFalse(result.getSuccess())) {
                 model.put("failReason", "获取验证码失败");
-                modelAndView.setViewName("/login");
+                modelAndView.setViewName("login");
                 return modelAndView;
             }
 
             model.put("failReason","获取验证码成功");
-            modelAndView.setViewName("/login");
+            modelAndView.setViewName("login");
             return modelAndView;
         } catch (Exception e) {
             model.put("failReason", "出现异常，异常原因:" + e.getMessage());
-            modelAndView.setViewName("/login");
+            modelAndView.setViewName("login");
             return modelAndView;
         }
     }
@@ -131,12 +131,12 @@ public class LoginController {
             loginInfo.setCorpId(corpId);
             BtripSessionUtils.setLoginInfo(loginInfo);
             model.put("loginInfo", loginInfo);
-            modelAndView.setViewName("/index");
+            modelAndView.setViewName("index");
             return modelAndView;
         } catch (Exception e) {
             log.error("selectUserCorp occurred exception, corpId:{}, phoneNumber:{}", corpId, phoneNumber, e);
             model.put("failReason", "登陆失败,失败原因:" + e.getMessage());
-            modelAndView.setViewName("/login");
+            modelAndView.setViewName("login");
             return modelAndView;
         }
     }

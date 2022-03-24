@@ -11,6 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class IndexController {
     @GetMapping("/index")
     public String login(){
-        return "login";
+        return "index";
+    }
+
+    @GetMapping("")
+    public String defaultController(){
+        return "index";
     }
 }
