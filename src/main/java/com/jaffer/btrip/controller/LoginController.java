@@ -26,7 +26,7 @@ import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 @Controller
-@Slf4j?
+@Slf4j
 public class LoginController {
 
     private static final String LOGIN_SESSION = "LOGIN_SESSION_%s";
