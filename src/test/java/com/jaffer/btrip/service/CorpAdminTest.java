@@ -33,7 +33,6 @@ public class CorpAdminTest extends AbsTest {
     @Test
     public void testGetAllAdmin(){
         BtripResult<List<UserPO>> corpAllAdminInfo = corpAdminService.getCorpAllAdminInfo(testCorpId);
-
         System.out.println(JSON.toJSONString(corpAllAdminInfo));
     }
 

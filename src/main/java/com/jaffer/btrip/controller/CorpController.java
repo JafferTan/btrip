@@ -14,10 +14,7 @@ import org.apache.commons.lang.StringUtils;
 import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Map;
@@ -25,6 +22,7 @@ import java.util.Map;
 
 @Controller
 @Slf4j
+@RequestMapping("/registerCorp")
 public class CorpController {
 
     @Autowired
@@ -32,11 +30,6 @@ public class CorpController {
 
     @Autowired
     private UserService userService;
-
-    @GetMapping("/registerCorp")
-    public String helloWorld() {
-        return "/registerCorp";
-    }
 
     @PostMapping("/registerCorpJson")
     public ModelAndView registerCorp(@RequestParam("corpName") String corpName, @RequestParam("userName") String userName) {

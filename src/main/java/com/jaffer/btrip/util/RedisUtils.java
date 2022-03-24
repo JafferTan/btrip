@@ -7,13 +7,13 @@ import redis.clients.jedis.JedisPoolConfig;
 public class RedisUtils {
 
     //Redis服务器IP
-    private static String ADDR = "120.25.149.154";
+    private static String ADDR = "101.33.236.202";
 
     //Redis的端口号
     private static int PORT = 6379;
 
     //访问密码
-    private static String AUTH = "Jaffer";
+    private static String AUTH = "foobared";
 
     //可用连接实例的最大数目，默认值为8；
     //如果赋值为-1，则表示不限制；如果pool已经分配了maxActive个jedis实例，则此时pool的状态为exhausted(耗尽)。

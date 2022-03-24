@@ -10,7 +10,7 @@ public class BtripResult<T> implements Serializable {
     /**
      * 调用结果
      */
-    private Boolean success;
+    private Boolean success = false;
 
     /**
      * 错误信息

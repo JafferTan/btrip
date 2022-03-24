@@ -36,7 +36,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         } catch (Exception e) {
             log.error("LoginInterceptor occurred exception, sessionId:{}", request.getSession().getId(), e);
         }
-        response.sendRedirect("/login");
+        response.sendRedirect("login");
         return false;
     }
 }

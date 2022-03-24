@@ -72,6 +72,11 @@ public class CorpManager {
         return corpAdminPO.getCorpId();
     }
 
+    /**
+     * 根据企业id获取企业详情
+     * @param corpId
+     * @return
+     */
     public CorpPO getCorpDetailByCorpId(String corpId) {
         CorpPOExample corpPOExample = new CorpPOExample();
         CorpPOExample.Criteria criteria = corpPOExample.createCriteria().andCorpIdEqualTo(corpId).andStatusEqualTo(RowStatusEnum.NORMAL.getStatus());
@@ -100,7 +105,7 @@ public class CorpManager {
 
 
     /**
-     * 根据手机号查询企业信息
+     * 根据手机号查询员工所在企业信息
      * @param phoneNumber
      * @return
      */
@@ -131,6 +136,11 @@ public class CorpManager {
     }
 
 
+    /**
+     * 查询多个企业数据
+     * @param corpIdList
+     * @return
+     */
     public List<CorpPO> findCorpByCorpIdList(List<String> corpIdList) {
         CorpPOExample corpPOExample = new CorpPOExample();
         CorpPOExample.Criteria criteria = corpPOExample.createCriteria().andCorpIdIn(corpIdList).andStatusEqualTo(RowStatusEnum.NORMAL.getStatus());

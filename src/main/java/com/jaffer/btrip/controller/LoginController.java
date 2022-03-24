@@ -17,10 +17,7 @@ import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import redis.clients.jedis.Jedis;
 
@@ -29,7 +26,7 @@ import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 @Controller
-@Slf4j
+@Slf4j?
 public class LoginController {
 
     private static final String LOGIN_SESSION = "LOGIN_SESSION_%s";
@@ -45,7 +42,7 @@ public class LoginController {
 
     @GetMapping(value = "/login")
     public String helloWorld() {
-        return "/login";
+        return "login";
     }
 
     @PostMapping("/loginJson")
@@ -148,10 +145,10 @@ public class LoginController {
         HttpSession session = request.getSession();
         try {
             session.invalidate();
-            return "/login";
+            return "login";
         } catch (Exception e) {
             log.error("loginOut fail, sessionId:{}",session.getId(), e);
-            return "/login";
+            return "login";
         }
     }
 }
