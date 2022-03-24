@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @Slf4j
-@RequestMapping("/index")
 public class IndexController {
-
+    @GetMapping("/index")
+    public String login(){
+        return "login";
+    }
 }

@@ -40,10 +40,11 @@ public class LoginController {
     @Autowired
     private CorpService corpService;
 
-    @GetMapping(value = "/login")
-    public String helloWorld() {
+    @GetMapping("/login")
+    public String login (){
         return "login";
     }
+
 
     @PostMapping("/loginJson")
     @ResponseBody

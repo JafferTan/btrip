@@ -22,7 +22,7 @@ import java.util.Map;
 
 @Controller
 @Slf4j
-@RequestMapping("/registerCorp")
+@RequestMapping("registerCorp")
 public class CorpController {
 
     @Autowired

@@ -26,7 +26,7 @@ import java.util.Objects;
 
 @Controller
 @Slf4j
-@RequestMapping("/deptInfo")
+@RequestMapping("deptInfo")
 public class DeptController {
 
     @Autowired
