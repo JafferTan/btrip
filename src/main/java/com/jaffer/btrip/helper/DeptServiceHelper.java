@@ -2,17 +2,10 @@ package com.jaffer.btrip.helper;
 
 import com.jaffer.btrip.beans.entity.DeptMaintainRQ;
 import com.jaffer.btrip.beans.entity.DeptPO;
-import com.jaffer.btrip.enums.BtripSpecialDeptEnum;
 import com.jaffer.btrip.enums.RowStatusEnum;
-import com.jaffer.btrip.exception.BizException;
-import com.jaffer.btrip.manager.DeptManager;
-import com.jaffer.btrip.util.CodeZipUtil;
-import org.checkerframework.checker.units.qual.C;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
-import java.util.Objects;
 
 @Component
 public class DeptServiceHelper {

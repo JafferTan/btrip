@@ -1,12 +1,6 @@
 package com.jaffer.btrip.enums;
 
-import com.google.common.collect.Maps;
 import lombok.Getter;
-import sun.dc.pr.PRError;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public enum FlightLimitEnum {
 

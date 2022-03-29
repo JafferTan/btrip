@@ -2,10 +2,10 @@ package com.jaffer.btrip.mapper;
 
 import com.jaffer.btrip.beans.entity.TripStandardPO;
 import com.jaffer.btrip.beans.entity.TripStandardPOExample;
-import java.util.List;
-
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 @Mapper
 public interface TripStandardPOMapper {
     long countByExample(TripStandardPOExample example);

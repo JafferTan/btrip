@@ -3,12 +3,10 @@ package com.jaffer.btrip.helper;
 import com.alibaba.fastjson.JSON;
 import com.jaffer.btrip.beans.entity.TripStandardPO;
 import com.jaffer.btrip.beans.entity.TripStandardRQ;
-import com.jaffer.btrip.enums.FlightLimitEnum;
 import com.jaffer.btrip.enums.RowStatusEnum;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
-import java.util.List;
 
 @Component
 public class TripStandardServiceHelper {

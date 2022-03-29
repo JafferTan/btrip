@@ -2,8 +2,6 @@ package com.jaffer.btrip.metaq;
 
 import org.apache.rocketmq.client.producer.SendResult;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import java.util.Map;
 
 /**

@@ -3,7 +3,6 @@ package com.jaffer.btrip.beans.entity;
 import lombok.Data;
 
 import java.util.List;
-import java.util.Map;
 
 @Data
 public class TripStandardRQ {
