@@ -20,11 +20,22 @@ public class LoginInterceptor implements HandlerInterceptor {
     private static final String LOGIN_SESSION = "LOGIN_SESSION_%s";
 
 
+    /**
+     * 登陆态拦截
+     * @param request
+     * @param response
+     * @param handler
+     * @return
+     * @throws Exception
+     */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         try {
+            /**
+             * 去session中取登陆态
+             */
             LoginInfo loginInfo = (LoginInfo) request.getSession().getAttribute("loginInfo");
-            if (!Objects.isNull(loginInfo)) {
+            if (Objects.nonNull(loginInfo)) {
                 return true;
             }
         } catch (Exception e) {
