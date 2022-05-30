@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>审批单页面</title>
+</head>
+<body>
+
+<div>
+  <span th:text = "${response}"></span>
+</div>
+<br>
+
+<form action="/queryTask" method="post">
+  <p>流程实例id: <input type="text" name="processInstanceId"></p>
+  <button type="submit">查看流程task</button>
+</form>
+<br>
+
+<form action="/completeTask" method="post">
+  <p>流程实例id: <input type="text" name="processInstanceId"></p>
+  <button type="submit">通过审批</button>
+</form>
+<br>
+
+
+备案号:<a href="https://beian.miit.gov.cn/" target="_blank">粤ICP备2022032069号-1</a>
+
+</body>
+</html>

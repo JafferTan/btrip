@@ -21,6 +21,7 @@ public class LoginConfig implements WebMvcConfigurer {
         excludePaths.add("/login");
         excludePaths.add("/loginJson");
         excludePaths.add("/test");
+        excludePaths.add("/error");
         excludePaths.add("/getAuthCodeJson");
         excludePaths.add("/templates/**");
         registry.addInterceptor(loginInterceptor).addPathPatterns("/**").excludePathPatterns(excludePaths);
