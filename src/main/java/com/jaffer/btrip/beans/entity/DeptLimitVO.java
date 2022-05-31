@@ -22,7 +22,7 @@ public class DeptLimitVO {
     /**
      * 部门主管设置
      */
-    private String managerIds;
+    private String managerId;
 
     /**
      * 是否有子部门

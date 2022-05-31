@@ -5,8 +5,6 @@ import com.jaffer.btrip.beans.entity.DeptPO;
 import com.jaffer.btrip.beans.entity.SubDeptVO;
 import com.jaffer.btrip.util.BtripResult;
 
-import java.util.Set;
-
 public interface DeptService {
 
     /**
@@ -39,7 +37,7 @@ public interface DeptService {
      * @param deptId
      * @return
      */
-    BtripResult<Set<String>> getDeptManagerIds(String corpId, Long deptId);
+    BtripResult<String> getDeptManagerId(String corpId, Long deptId);
 
     /**
      * 获取一个部门的子部门数据
@@ -48,6 +46,9 @@ public interface DeptService {
      * @return
      */
     BtripResult<SubDeptVO> getSubDeptDetail(String corpId, Long deptId);
+
+
+    BtripResult<String> getParentDeptManagerId(String corpId, String userId, Integer level);
 
 
 }

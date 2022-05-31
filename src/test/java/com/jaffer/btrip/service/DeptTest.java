@@ -4,10 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.jaffer.btrip.AbsTest;
 import com.jaffer.btrip.beans.entity.DeptMaintainRQ;
 import com.jaffer.btrip.beans.entity.DeptPO;
-import com.jaffer.btrip.service.DeptService;
 import com.jaffer.btrip.util.BtripResult;
-import javafx.application.Application;
-import org.checkerframework.checker.units.qual.A;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,14 +15,13 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 @SpringBootTest
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = AbsTest.class)
 public class DeptTest extends AbsTest {
 
-    public static final String testCorpId = "btrip2ad044b586ce4a7bbfc9d152e7e54392";
+    public static final String testCorpId = "btrip31979f0b54204e64856d057054f9e1ce";
 
     @Autowired
     private DeptService deptService;
@@ -43,8 +39,8 @@ public class DeptTest extends AbsTest {
     public void testCreateDept(){
         DeptMaintainRQ deptMaintainRQ = new DeptMaintainRQ();
         deptMaintainRQ.setCorpId(testCorpId);
-        deptMaintainRQ.setDeptName("测试部门2");
-        deptMaintainRQ.setDeptPid(1L);
+        deptMaintainRQ.setDeptName("测试部门4");
+        deptMaintainRQ.setDeptPid(6L);
         BtripResult<Boolean> orEditDept = deptService.createOrEditDept(deptMaintainRQ);
         System.out.println(JSON.toJSONString(orEditDept));
     }
@@ -56,9 +52,9 @@ public class DeptTest extends AbsTest {
     }
 
     @Test
-    public void testGetDeptManagerIds() {
-        BtripResult<Set<String>> deptManagerIds = deptService.getDeptManagerIds(testCorpId, 3L);
-        System.out.println(JSON.toJSONString(deptManagerIds));
+    public void testGetDeptManagerId() {
+        BtripResult<String> deptManagerId = deptService.getDeptManagerId(testCorpId, 3L);
+        System.out.println(JSON.toJSONString(deptManagerId));
     }
 
 
@@ -67,20 +63,27 @@ public class DeptTest extends AbsTest {
         DeptMaintainRQ deptMaintainRQ = new DeptMaintainRQ();
         deptMaintainRQ.setCorpId(testCorpId);
         deptMaintainRQ.setDeptId(3L);
-        deptMaintainRQ.setManagerIds("btripf0cabfb533fb4189a48f06db14a2e400|btrip019afb987be645f9b4d2bf9e11954d88");
+        deptMaintainRQ.setManagerId("btripf0cabfb533fb4189a48f06db14a2e400|btrip019afb987be645f9b4d2bf9e11954d88");
         BtripResult<Boolean> orEditDept = deptService.createOrEditDept(deptMaintainRQ);
         System.out.println(JSON.toJSONString(orEditDept));
     }
 
     @Test
     public void testGetUserPhoneNumber() {
-        BtripResult<Set<String>> deptManagerIds = deptService.getDeptManagerIds(testCorpId, 3L);
+        BtripResult<String> deptManagerId = deptService.getDeptManagerId(testCorpId, 3L);
 
-        List<String> strings = new ArrayList<>(deptManagerIds.getModule());
+        List<String> strings = new ArrayList<>();
+        strings.add(deptManagerId.getModule());
 
         BtripResult<Map<String, String>> userPhoneNumber = userService.getUserPhoneNumber(testCorpId, strings);
 
         System.out.println(JSON.toJSONString(userPhoneNumber));
+    }
+
+    @Test
+    public void getPDeptManagerId() {
+        BtripResult<String> parentDeptManagerId = deptService.getParentDeptManagerId("btrip31979f0b54204e64856d057054f9e1ce", "btripdba7660ecec94ac192671ba41ae2e0b4", 2);
+        System.out.println(JSON.toJSONString(parentDeptManagerId));
     }
 
 }

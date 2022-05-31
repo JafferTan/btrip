@@ -43,7 +43,7 @@
                 type="XMLMAPPER" />
 
         <!-- table name 可以添加多个table标签-->
-        <table tableName="btrip_standard_setting"  domainObjectName="TripStandardPO" enableCountByExample="true"
+        <table tableName="btrip_dept"  domainObjectName="DeptPO" enableCountByExample="true"
                enableUpdateByExample="true" enableDeleteByExample="true"
                enableSelectByExample="true" selectByExampleQueryId="true" >
             <generatedKey column="id" identity="true" sqlStatement="Mysql"/>

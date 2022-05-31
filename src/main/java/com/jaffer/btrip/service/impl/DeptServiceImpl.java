@@ -16,10 +16,8 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Slf4j
 @Service
@@ -83,18 +81,7 @@ public class DeptServiceImpl implements DeptService {
             if (Objects.equals(deptId, BtripSpecialDeptEnum.ROOT_DEPT.getDeptId())) {
                 return BtripResultUtils.returnFailMsg("特殊部门不能删除");
             }
-
-            DeptPO dept = deptManager.getDeptByDeptId(corpId, deptId);
-            if (Objects.isNull(dept)) {
-                return BtripResultUtils.returnFailMsg("查询的部门不存在");
-            }
-            List<Long> subDeptIds = deptManager.findSubDeptIds(corpId, dept.getLevelRelationMask());
-
-            Long userNumber = userManager.countUserByDeptIdList(subDeptIds);
-            if (userNumber != 0) {
-                return BtripResultUtils.returnFailMsg("部门人数大于0,不能删除");
-            }
-            deptManager.logicDeleteDepts(corpId, subDeptIds, dept.getDeptPid());
+            deptManager.logicDeleteDepts(corpId, deptId);
             return BtripResultUtils.returnSuccess(true);
         } catch (Exception e) {
             log.error("deleteDept fail, corpId:{}, deptId:{}", corpId, deptId, e);
@@ -106,26 +93,17 @@ public class DeptServiceImpl implements DeptService {
 
 
     @Override
-    public BtripResult<Set<String>> getDeptManagerIds(String corpId, Long deptId) {
+    public BtripResult<String> getDeptManagerId(String corpId, Long deptId) {
         try {
 
             DeptPO dept = deptManager.getDeptByDeptId(corpId, deptId);
             if (Objects.isNull(dept)) {
                 return BtripResultUtils.returnFailMsg("部门不存在");
             }
-
-            Set<String> managerIdSet = new HashSet<>();
-            String managerIds = dept.getManagerIds();
-            if (!StringUtils.isEmpty(managerIds)) {
-                String[] split = StringUtils.split(managerIds, "|");
-                for (String s : split) {
-                    boolean add = managerIdSet.add(s);
-                }
-            }
-
-            return BtripResultUtils.returnSuccess(managerIdSet);
+            String managerId = dept.getManagerId();
+            return BtripResultUtils.returnSuccess(managerId);
         } catch (Exception e) {
-            log.error("getDeptManagerIds fail, corpId:{}, deptId:{}", corpId, deptId);
+            log.error("getDeptManagerId fail, corpId:{}, deptId:{}", corpId, deptId);
             return BtripResultUtils.returnFailMsg("获取部门主管信息异常,异常原因: " + e.getMessage());
         }
     }
@@ -139,6 +117,20 @@ public class DeptServiceImpl implements DeptService {
         } catch (Exception e) {
             log.error("getDeptSubDeptDetail fail, corpId:{}, deptId:{}", corpId, deptId);
             return BtripResultUtils.returnFailMsg("获取子部门信息异常,异常原因: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public BtripResult<String> getParentDeptManagerId(String corpId, String userId, Integer level) {
+        try {
+            if (StringUtils.isEmpty(corpId) || StringUtils.isEmpty(userId) || Objects.isNull(level)) {
+                return BtripResultUtils.returnFailMsg("非法参数不存在");
+            }
+            String leaderId = deptManager.getParentDeptManagerId(corpId, userId, level);
+            return BtripResultUtils.returnSuccess(leaderId);
+        } catch (Exception e) {
+            log.error("getParentDeptManagerId fail, corpId:{}, deptId:{}", corpId, userId);
+            return BtripResultUtils.returnFailMsg("获取部门主管信息异常,异常原因: " + e.getMessage());
         }
     }
 }

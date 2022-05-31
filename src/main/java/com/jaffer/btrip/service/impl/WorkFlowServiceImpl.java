@@ -12,6 +12,8 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Service
 @Slf4j
 public class WorkFlowServiceImpl implements WorkFlowService {
@@ -49,5 +51,18 @@ public class WorkFlowServiceImpl implements WorkFlowService {
             log.error("WorkFlowService.queryTask occurred Exception, taskId:{}", processInstanceId, e);
             return BtripResultUtils.returnFailMsg("查询任务出现异常");
         }
+    }
+
+    @Override
+    public BtripResult<Boolean> completeTaskByUserId(String processInstanceId, String userId) {
+        Task task = taskService.createTaskQuery()
+                .processInstanceId(processInstanceId)
+                .taskAssignee(userId)
+                .singleResult();
+        if (Objects.isNull(task)) {
+            return BtripResultUtils.returnFailMsg("任务为空");
+        }
+        taskService.complete(task.getId());
+        return BtripResultUtils.returnSuccess(true);
     }
 }

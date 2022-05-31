@@ -22,14 +22,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @SpringBootTest
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = AbsTest.class)
 public class UserTest extends AbsTest{
 
-    public static final String testCorpId = "btrip2ad044b586ce4a7bbfc9d152e7e54392";
+    public static final String testCorpId = "btrip31979f0b54204e64856d057054f9e1ce";
 
     @Autowired
     private UserService userService;
@@ -45,9 +47,9 @@ public class UserTest extends AbsTest{
     public void testCreateUser() {
         UserMaintainRQ rq = new UserMaintainRQ();
         rq.setCorpId(testCorpId);
-        rq.setPhoneNumber("18857888804");
+        rq.setPhoneNumber("18857458804");
         rq.setUserName("用户信息test1");
-        rq.setDeptId(1L);
+        rq.setDeptId(6L);
         BtripResult<Boolean> orEditUser = userService.createOrEditUser(rq);
         System.out.println(JSON.toJSONString(orEditUser));
     }
@@ -82,7 +84,6 @@ public class UserTest extends AbsTest{
         RepositoryService service = processEngine.getRepositoryService();
         Deployment deploy = service.createDeployment()
                 .addClasspathResource("bpmn/evection.bpmn")
-                .addClasspathResource("bpmn/evection.png")
                 .name("出差demo")
                 .key("evection")
                 .deploy();
@@ -108,8 +109,9 @@ public class UserTest extends AbsTest{
         //创建一个审批单，将这个审批单的id挂到某个人身上
         ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
         RuntimeService runtimeService = processEngine.getRuntimeService();
-        String id = "evection:1:f9dd981f-dfd5-11ec-9f67-565b20092840";
-        ProcessInstance processInstance = runtimeService.startProcessInstanceById(id);
+        String key = "evection";
+        Map<String, Object> hashMap = new HashMap<>();
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(key, hashMap);
         System.out.println("流程定义的id:" + processInstance.getProcessInstanceId());
         System.out.println("流程实例的id:" + processInstance.getId());
         System.out.println("当前活动的id:" + processInstance.getActivityId());
@@ -130,10 +132,12 @@ public class UserTest extends AbsTest{
 
     @Test
     public void queryTask() {
-        String id = "372c24de-dfe4-11ec-ac5a-12876bd2949f";
-        Task task = taskService.createTaskQuery().processInstanceId(id).singleResult();
+        Task task = taskService.createTaskQuery().taskAssignee("abc").singleResult();
         System.out.println("任务实例id:" + task.getProcessInstanceId());
-        System.out.println("任务目前名称" + task.getName());
+        System.out.println("任务目前名称:" + task.getName());
+        String assignee = task.getAssignee();
+        System.out.println("签发人:" + assignee);
+        System.out.println("任务变量:" + task.getProcessVariables());
     }
 
     @Test
@@ -145,6 +149,25 @@ public class UserTest extends AbsTest{
 //                .processInstanceId(id)
 //                .singleResult();
 //        taskService.complete(task.getId());
+    }
+
+    @Test
+    public void refuse() {
+        String id = "372c24de-dfe4-11ec-ac5a-12876bd2949f";
+        ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
+        TaskService taskService = processEngine.getTaskService();
+        Task task = taskService.createTaskQuery()
+                .processInstanceId(id)
+                .singleResult();
+    }
+
+    @Test
+    public void claim() {
+        String id = "dd616aca-dfe0-11ec-9105-12876bd2949f";
+        Task task = taskService.createTaskQuery()
+                .processInstanceId(id)
+                .singleResult();
+        taskService.claim(task.getId(), "abc");
     }
 
     @Test

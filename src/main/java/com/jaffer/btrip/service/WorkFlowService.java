@@ -8,4 +8,6 @@ public interface WorkFlowService {
     BtripResult<Boolean> completeTask(String processInstanceId);
 
     BtripResult<Task> queryTask(String processInstanceId);
+
+    BtripResult<Boolean> completeTaskByUserId(String processInstanceId, String userId);
 }

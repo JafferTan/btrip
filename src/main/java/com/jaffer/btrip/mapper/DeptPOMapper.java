@@ -2,10 +2,11 @@ package com.jaffer.btrip.mapper;
 
 import com.jaffer.btrip.beans.entity.DeptPO;
 import com.jaffer.btrip.beans.entity.DeptPOExample;
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
+import org.springframework.security.core.parameters.P;
 @Mapper
 public interface DeptPOMapper {
     long countByExample(DeptPOExample example);
@@ -30,5 +31,5 @@ public interface DeptPOMapper {
 
     int updateByPrimaryKey(DeptPO record);
 
-    List<Long> findSubDeptIdsByMask(@Param("corpId")String corpId, @Param("mask") String mask);
+    List<Long> findSubDeptIdsByMask(@Param("corpId") String corpId, @Param("mask") String mask);
 }

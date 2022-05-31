@@ -1,5 +1,7 @@
 package com.jaffer.btrip.manager;
 
+import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Lists;
 import com.jaffer.btrip.beans.entity.*;
 import com.jaffer.btrip.enums.BtripSpecialDeptEnum;
 import com.jaffer.btrip.enums.RowStatusEnum;
@@ -7,6 +9,7 @@ import com.jaffer.btrip.exception.BizException;
 import com.jaffer.btrip.helper.DeptServiceHelper;
 import com.jaffer.btrip.mapper.DeptPOMapper;
 import com.jaffer.btrip.util.CodeZipUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +29,9 @@ public class DeptManager {
     @Autowired
     private DeptServiceHelper deptServiceHelper;
 
+    @Autowired
+    private UserManager userManager;
+
     /**
      * 创建部门
      *
@@ -41,8 +47,6 @@ public class DeptManager {
             if (Objects.isNull(parentDept)) {
                 throw new BizException("父部门不存在");
             }
-            Integer newCount = parentDept.getSubDeptCount() + 1;
-            parentDept.setSubDeptCount(newCount);
             deptPOMapper.updateByPrimaryKeySelective(parentDept);
         }
         int insertRes = deptPOMapper.insert(deptPO);
@@ -125,27 +129,30 @@ public class DeptManager {
     /**
      * 删除部门，会把部门树的所有的节点设置为删除状态，父部门的相应子部门计数减少
      * @param corpId
-     * @param deptList
-     * @param pid
+     * @param deptId
      * @return
      */
     @Transactional
-    public Boolean logicDeleteDepts(String corpId, List<Long> deptList, Long pid) {
+    public Boolean logicDeleteDepts(String corpId, Long deptId) {
 
-        //将父部门的直接子部门数量获取
-        if (!Objects.equals(pid, BtripSpecialDeptEnum.ROOT_DEPT.getDeptId())) {
-            DeptPO parentDept = this.getDeptByDeptId(corpId, pid);
-            Integer newCount = parentDept.getSubDeptCount() - 1;
-            parentDept.setSubDeptCount(newCount);
-            deptPOMapper.updateByPrimaryKeySelective(parentDept);
+        DeptPO dept = this.getDeptByDeptId(corpId, deptId);
+        if (Objects.isNull(dept)) {
+            throw new BizException("部门不存在");
+        }
+
+        List<Long> subDeptIds = this.findSubDeptIds(corpId, dept.getLevelRelationMask());
+
+        Long userNumber = userManager.countUserByDeptIdList(subDeptIds);
+        if (userNumber != 0) {
+            throw new BizException("部门人数大于0,不能删除");
         }
 
         DeptPOExample deptPOExample = new DeptPOExample();
-        DeptPOExample.Criteria criteria = deptPOExample.createCriteria().andCorpIdEqualTo(corpId).andIdIn(deptList);
+        DeptPOExample.Criteria criteria = deptPOExample.createCriteria().andCorpIdEqualTo(corpId).andIdIn(subDeptIds);
         DeptPO deptPO = new DeptPO();
         deptPO.setStatus(RowStatusEnum.DELETE.getStatus());
         int i = deptPOMapper.updateByExampleSelective(deptPO, deptPOExample);
-        if (i < deptList.size()) {
+        if (i < subDeptIds.size()) {
             throw new BizException("删除部门失败");
         }
         return true;
@@ -174,14 +181,43 @@ public class DeptManager {
         for (DeptPO deptPO : deptPOS) {
             DeptLimitVO deptLimitVO = new DeptLimitVO();
             deptLimitVO.setDeptId(deptPO.getId());
-            deptLimitVO.setHasSubDept(deptPO.getSubDeptCount() != 0);
-            deptLimitVO.setManagerIds(deptPO.getManagerIds());
+            deptLimitVO.setManagerId(deptPO.getManagerId());
             deptLimitVO.setDeptName(deptPO.getDeptName());
             subDeptList.add(deptLimitVO);
         }
 
         return res;
     }
+
+
+    public String getParentDeptManagerId(String corpId, String userId, Integer level) {
+        UserPO userByUserId = userManager.findUserByUserId(corpId, userId);
+        if (Objects.isNull(userByUserId)) {
+            return null;
+        }
+        Long deptId = userByUserId.getDeptId();
+        DeptPO dept = this.getDeptByDeptId(corpId, deptId);
+        String levelRelation = dept.getLevelRelation();
+        List<String> parentDeptIdList = this.splitDeptLevelRelation(levelRelation);
+        if (parentDeptIdList.size() < level) {
+            return null;
+        }
+        Long parentDeptId = Long.valueOf(parentDeptIdList.get(level));
+
+        if (Objects.equals(parentDeptId, BtripSpecialDeptEnum.ROOT_DEPT.getDeptId())) {
+            return null;
+        }
+
+        DeptPO dept1 = this.getDeptByDeptId(corpId, Long.valueOf(parentDeptIdList.get(level)));
+        return dept1.getManagerId();
+    }
+
+    public List<String> splitDeptLevelRelation(String levelRelation) {
+        String[] split = StringUtils.split(levelRelation,"|");
+        return Lists.newArrayList(split);
+    }
+
+
 
 
 

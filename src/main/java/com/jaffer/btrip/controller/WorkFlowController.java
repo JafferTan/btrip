@@ -66,13 +66,17 @@ public class WorkFlowController {
                 return modelAndView;
             }
 
-            if (Objects.isNull(result.getModule())) {
+            if (Objects.isNull(result.getModule().getProcessInstanceId())) {
                 model.put("response", "该审批单已通过审批");
                 modelAndView.setViewName("workflow");
                 return modelAndView;
             }
-
-            model.put("response", JSON.toJSONString(result.getModule()));
+            Task task = result.getModule();
+            StringBuilder sb = new StringBuilder();
+            sb.append("流程实例id:" + task.getProcessInstanceId() + "\n");
+            sb.append("流程taskName:" + task.getName() + "\n");
+            sb.append("任务签发人:" + task.getAssignee() + "\n");
+            model.put("response", sb.toString());
             modelAndView.setViewName("workflow");
             return modelAndView;
 
@@ -83,6 +87,23 @@ public class WorkFlowController {
         }
     }
 
+    @PostMapping("/completeTaskByUserId")
+    @ResponseBody
+    public ModelAndView completeTaskByUserId(ModelAndView modelAndView, @RequestParam("processInstanceId") String processInstanceId, @RequestParam("userId") String userId) {
+        Map<String, Object> model = modelAndView.getModel();
+        try {
+            BtripResult<Boolean> result = workFlowService.completeTask(processInstanceId);
+
+            model.put("response","任务完成成功");
+            modelAndView.setViewName("workflow");
+            return modelAndView;
+
+        } catch (Exception e) {
+            model.put("response", "出现异常，异常原因:" + e.getMessage());
+            modelAndView.setViewName("workflow");
+            return modelAndView;
+        }
+    }
 
 
 

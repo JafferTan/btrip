@@ -8,11 +8,10 @@
     <result column="corp_id" jdbcType="VARCHAR" property="corpId" />
     <result column="dept_pid" jdbcType="BIGINT" property="deptPid" />
     <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
-    <result column="manager_ids" jdbcType="VARCHAR" property="managerIds" />
+    <result column="manager_id" jdbcType="VARCHAR" property="managerId" />
     <result column="level_relation" jdbcType="VARCHAR" property="levelRelation" />
     <result column="level_relation_mask" jdbcType="VARCHAR" property="levelRelationMask" />
     <result column="status" jdbcType="VARCHAR" property="status" />
-    <result column="sub_dept_count" jdbcType="INTEGER" property="subDeptCount" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -73,8 +72,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, gmt_create, gmt_modified, corp_id, dept_pid, dept_name, manager_ids, level_relation, 
-    level_relation_mask, status, sub_dept_count
+    id, gmt_create, gmt_modified, corp_id, dept_pid, dept_name, manager_id, level_relation, 
+    level_relation_mask, status
   </sql>
   <select id="selectByExample" parameterType="com.jaffer.btrip.beans.entity.DeptPOExample" resultMap="BaseResultMap">
     select
@@ -112,13 +111,13 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into btrip_dept (gmt_create, gmt_modified, corp_id, 
-      dept_pid, dept_name, manager_ids, 
-      level_relation, level_relation_mask, status, 
-      sub_dept_count)
+      dept_pid, dept_name, manager_id, 
+      level_relation, level_relation_mask, status
+      )
     values (#{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, #{corpId,jdbcType=VARCHAR}, 
-      #{deptPid,jdbcType=BIGINT}, #{deptName,jdbcType=VARCHAR}, #{managerIds,jdbcType=VARCHAR}, 
-      #{levelRelation,jdbcType=VARCHAR}, #{levelRelationMask,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
-      #{subDeptCount,jdbcType=INTEGER})
+      #{deptPid,jdbcType=BIGINT}, #{deptName,jdbcType=VARCHAR}, #{managerId,jdbcType=VARCHAR}, 
+      #{levelRelation,jdbcType=VARCHAR}, #{levelRelationMask,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jaffer.btrip.beans.entity.DeptPO">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -141,8 +140,8 @@
       <if test="deptName != null">
         dept_name,
       </if>
-      <if test="managerIds != null">
-        manager_ids,
+      <if test="managerId != null">
+        manager_id,
       </if>
       <if test="levelRelation != null">
         level_relation,
@@ -152,9 +151,6 @@
       </if>
       <if test="status != null">
         status,
-      </if>
-      <if test="subDeptCount != null">
-        sub_dept_count,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -173,8 +169,8 @@
       <if test="deptName != null">
         #{deptName,jdbcType=VARCHAR},
       </if>
-      <if test="managerIds != null">
-        #{managerIds,jdbcType=VARCHAR},
+      <if test="managerId != null">
+        #{managerId,jdbcType=VARCHAR},
       </if>
       <if test="levelRelation != null">
         #{levelRelation,jdbcType=VARCHAR},
@@ -184,9 +180,6 @@
       </if>
       <if test="status != null">
         #{status,jdbcType=VARCHAR},
-      </if>
-      <if test="subDeptCount != null">
-        #{subDeptCount,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -217,8 +210,8 @@
       <if test="record.deptName != null">
         dept_name = #{record.deptName,jdbcType=VARCHAR},
       </if>
-      <if test="record.managerIds != null">
-        manager_ids = #{record.managerIds,jdbcType=VARCHAR},
+      <if test="record.managerId != null">
+        manager_id = #{record.managerId,jdbcType=VARCHAR},
       </if>
       <if test="record.levelRelation != null">
         level_relation = #{record.levelRelation,jdbcType=VARCHAR},
@@ -228,9 +221,6 @@
       </if>
       <if test="record.status != null">
         status = #{record.status,jdbcType=VARCHAR},
-      </if>
-      <if test="record.subDeptCount != null">
-        sub_dept_count = #{record.subDeptCount,jdbcType=INTEGER},
       </if>
     </set>
     <if test="_parameter != null">
@@ -245,11 +235,10 @@
       corp_id = #{record.corpId,jdbcType=VARCHAR},
       dept_pid = #{record.deptPid,jdbcType=BIGINT},
       dept_name = #{record.deptName,jdbcType=VARCHAR},
-      manager_ids = #{record.managerIds,jdbcType=VARCHAR},
+      manager_id = #{record.managerId,jdbcType=VARCHAR},
       level_relation = #{record.levelRelation,jdbcType=VARCHAR},
       level_relation_mask = #{record.levelRelationMask,jdbcType=VARCHAR},
-      status = #{record.status,jdbcType=VARCHAR},
-      sub_dept_count = #{record.subDeptCount,jdbcType=INTEGER}
+      status = #{record.status,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -272,8 +261,8 @@
       <if test="deptName != null">
         dept_name = #{deptName,jdbcType=VARCHAR},
       </if>
-      <if test="managerIds != null">
-        manager_ids = #{managerIds,jdbcType=VARCHAR},
+      <if test="managerId != null">
+        manager_id = #{managerId,jdbcType=VARCHAR},
       </if>
       <if test="levelRelation != null">
         level_relation = #{levelRelation,jdbcType=VARCHAR},
@@ -283,9 +272,6 @@
       </if>
       <if test="status != null">
         status = #{status,jdbcType=VARCHAR},
-      </if>
-      <if test="subDeptCount != null">
-        sub_dept_count = #{subDeptCount,jdbcType=INTEGER},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
@@ -297,11 +283,10 @@
       corp_id = #{corpId,jdbcType=VARCHAR},
       dept_pid = #{deptPid,jdbcType=BIGINT},
       dept_name = #{deptName,jdbcType=VARCHAR},
-      manager_ids = #{managerIds,jdbcType=VARCHAR},
+      manager_id = #{managerId,jdbcType=VARCHAR},
       level_relation = #{levelRelation,jdbcType=VARCHAR},
       level_relation_mask = #{levelRelationMask,jdbcType=VARCHAR},
-      status = #{status,jdbcType=VARCHAR},
-      sub_dept_count = #{subDeptCount,jdbcType=INTEGER}
+      status = #{status,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 

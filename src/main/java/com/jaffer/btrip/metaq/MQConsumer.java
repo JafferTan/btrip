@@ -56,8 +56,7 @@ public class MQConsumer implements BtripConsumer {
     public ConsumeConcurrentlyStatus processMsg(MessageExt msg) {
         try {
             String bodyString = new String(msg.getBody(), StandardCharsets.UTF_8);
-            String s = JSON.parseObject(bodyString, String.class);
-            System.out.println(s);
+            System.out.println(bodyString);
         } catch (Exception e) {
           e.printStackTrace();
           return ConsumeConcurrentlyStatus.RECONSUME_LATER;

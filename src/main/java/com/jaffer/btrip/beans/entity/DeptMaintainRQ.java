@@ -11,7 +11,7 @@ public class DeptMaintainRQ {
 
     private String deptName;
 
-    private String managerIds;
+    private String managerId;
 
     private Long deptPid;
 

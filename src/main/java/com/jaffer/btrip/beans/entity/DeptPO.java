@@ -15,15 +15,13 @@ public class DeptPO {
 
     private String deptName;
 
-    private String managerIds;
+    private String managerId;
 
     private String levelRelation;
 
     private String levelRelationMask;
 
     private String status;
-
-    private Integer subDeptCount;
 
     public Long getId() {
         return id;
@@ -73,12 +71,12 @@ public class DeptPO {
         this.deptName = deptName == null ? null : deptName.trim();
     }
 
-    public String getManagerIds() {
-        return managerIds;
+    public String getManagerId() {
+        return managerId;
     }
 
-    public void setManagerIds(String managerIds) {
-        this.managerIds = managerIds == null ? null : managerIds.trim();
+    public void setManagerId(String managerId) {
+        this.managerId = managerId == null ? null : managerId.trim();
     }
 
     public String getLevelRelation() {
@@ -103,13 +101,5 @@ public class DeptPO {
 
     public void setStatus(String status) {
         this.status = status == null ? null : status.trim();
-    }
-
-    public Integer getSubDeptCount() {
-        return subDeptCount;
-    }
-
-    public void setSubDeptCount(Integer subDeptCount) {
-        this.subDeptCount = subDeptCount;
     }
 }

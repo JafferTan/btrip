@@ -23,7 +23,7 @@ public class DeptServiceHelper {
         deptPO.setCorpId(rq.getCorpId());
         deptPO.setId(rq.getDeptId());
         deptPO.setDeptPid(rq.getDeptPid());
-        deptPO.setManagerIds(rq.getManagerIds());
+        deptPO.setManagerId(rq.getManagerId());
         deptPO.setStatus(RowStatusEnum.NORMAL.getStatus());
         return deptPO;
     }
