@@ -1,6 +1,5 @@
 package com.jaffer.btrip.metaq;
 
-import com.alibaba.fastjson.JSON;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;

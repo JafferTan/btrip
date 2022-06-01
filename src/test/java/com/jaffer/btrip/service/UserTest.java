@@ -5,6 +5,7 @@ import com.alibaba.fastjson.support.odps.udf.JSONTuple;
 import com.jaffer.btrip.AbsTest;
 import com.jaffer.btrip.beans.entity.UserMaintainRQ;
 import com.jaffer.btrip.beans.entity.UserPO;
+import com.jaffer.btrip.enums.WorkFlowKeyWordConstants;
 import com.jaffer.btrip.util.BtripResult;
 import org.activiti.engine.*;
 import org.activiti.engine.repository.Deployment;
@@ -84,6 +85,7 @@ public class UserTest extends AbsTest{
         RepositoryService service = processEngine.getRepositoryService();
         Deployment deploy = service.createDeployment()
                 .addClasspathResource("bpmn/evection.bpmn")
+                .addClasspathResource("bpmn/evection.png")
                 .name("出差demo")
                 .key("evection")
                 .deploy();
@@ -105,17 +107,16 @@ public class UserTest extends AbsTest{
 
 
     @Test
-    public void testProcessEngineInstance() {
+    public void ttestProcessEngineInstance() {
         //创建一个审批单，将这个审批单的id挂到某个人身上
         ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
         RuntimeService runtimeService = processEngine.getRuntimeService();
         String key = "evection";
         Map<String, Object> hashMap = new HashMap<>();
+        hashMap.put(WorkFlowKeyWordConstants.CORP_ID, "btrip31979f0b54204e64856d057054f9e1ce");
+        hashMap.put(WorkFlowKeyWordConstants.USER_ID, "btripdba7660ecec94ac192671ba41ae2e0b4");
+        hashMap.put(WorkFlowKeyWordConstants.LEVEL, 0);
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(key, hashMap);
-        System.out.println("流程定义的id:" + processInstance.getProcessInstanceId());
-        System.out.println("流程实例的id:" + processInstance.getId());
-        System.out.println("当前活动的id:" + processInstance.getActivityId());
-        System.out.println("当前流程的变量:" + processInstance.getProcessVariables());
     }
 
     @Test
@@ -132,23 +133,31 @@ public class UserTest extends AbsTest{
 
     @Test
     public void queryTask() {
-        Task task = taskService.createTaskQuery().taskAssignee("abc").singleResult();
-        System.out.println("任务实例id:" + task.getProcessInstanceId());
-        System.out.println("任务目前名称:" + task.getName());
-        String assignee = task.getAssignee();
-        System.out.println("签发人:" + assignee);
-        System.out.println("任务变量:" + task.getProcessVariables());
+        String corpId = "btrip31979f0b54204e64856d057054f9e1ce";
+        String userId = "btripf88c89a118294621a9e47af4586aaef6";
+        ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
+        TaskService taskService = processEngine.getTaskService();
+        List<Task> tasks = taskService.createTaskQuery()
+                .taskAssignee(corpId + "-" + userId)
+                .list();
+        for (Task task : tasks) {
+            System.out.println(JSON.toJSONString(task.getProcessVariables()));
+        }
     }
 
     @Test
     public void complete() {
-//        String id = "372c24de-dfe4-11ec-ac5a-12876bd2949f";
-//        ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
-//        TaskService taskService = processEngine.getTaskService();
-//        Task task = taskService.createTaskQuery()
-//                .processInstanceId(id)
-//                .singleResult();
-//        taskService.complete(task.getId());
+        String corpId = "btrip31979f0b54204e64856d057054f9e1ce";
+        String userId = "btripf88c89a118294621a9e47af4586aaef6";
+        ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
+        TaskService taskService = processEngine.getTaskService();
+        List<Task> tasks = taskService.createTaskQuery()
+                .taskAssignee(corpId + "-" + userId)
+                .list();
+        for (Task task : tasks) {
+            taskService.setVariable(task.getId(), WorkFlowKeyWordConstants.APPROVAL, 1);
+            taskService.complete(task.getId());
+        }
     }
 
     @Test

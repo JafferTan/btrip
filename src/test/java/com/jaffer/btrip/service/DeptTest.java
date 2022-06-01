@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.jaffer.btrip.AbsTest;
 import com.jaffer.btrip.beans.entity.DeptMaintainRQ;
 import com.jaffer.btrip.beans.entity.DeptPO;
+import com.jaffer.btrip.manager.DeptManager;
 import com.jaffer.btrip.util.BtripResult;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,6 +26,9 @@ public class DeptTest extends AbsTest {
 
     @Autowired
     private DeptService deptService;
+
+    @Autowired
+    private DeptManager deptManager;
 
     @Autowired
     private UserService userService;
@@ -82,8 +86,8 @@ public class DeptTest extends AbsTest {
 
     @Test
     public void getPDeptManagerId() {
-        BtripResult<String> parentDeptManagerId = deptService.getParentDeptManagerId("btrip31979f0b54204e64856d057054f9e1ce", "btripdba7660ecec94ac192671ba41ae2e0b4", 2);
-        System.out.println(JSON.toJSONString(parentDeptManagerId));
+        String parentDeptManagerId = deptManager.getParentDeptManagerId("btrip31979f0b54204e64856d057054f9e1ce", "btripdba7660ecec94ac192671ba41ae2e0b4", 1);
+        System.out.println(parentDeptManagerId);
     }
 
 }

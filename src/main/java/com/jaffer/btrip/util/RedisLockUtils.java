@@ -1,7 +1,6 @@
 package com.jaffer.btrip.util;
 
 import org.apache.commons.lang.BooleanUtils;
-import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 
 /**

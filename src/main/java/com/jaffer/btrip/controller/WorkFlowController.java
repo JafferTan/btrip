@@ -1,13 +1,13 @@
 package com.jaffer.btrip.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.google.common.collect.Maps;
+import com.jaffer.btrip.beans.entity.LoginInfo;
+import com.jaffer.btrip.enums.WorkFlowKeyWordConstants;
 import com.jaffer.btrip.service.WorkFlowService;
 import com.jaffer.btrip.util.BtripResult;
+import com.jaffer.btrip.util.BtripSessionUtils;
+import org.activiti.engine.RuntimeService;
+import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
-import org.apache.commons.lang.BooleanUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.rocketmq.client.producer.SendResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -24,6 +25,9 @@ public class WorkFlowController {
 
     @Autowired
     private WorkFlowService workFlowService;
+
+    @Autowired
+    private RuntimeService runtimeService;
 
     @RequestMapping(value = "/workflow")
     public String hello(){
@@ -98,6 +102,37 @@ public class WorkFlowController {
             modelAndView.setViewName("workflow");
             return modelAndView;
 
+        } catch (Exception e) {
+            model.put("response", "出现异常，异常原因:" + e.getMessage());
+            modelAndView.setViewName("workflow");
+            return modelAndView;
+        }
+    }
+
+    @PostMapping("/createTask")
+    @ResponseBody
+    public ModelAndView createTask(ModelAndView modelAndView, @RequestParam("bizKey") String bizKey) {
+        Map<String, Object> model = modelAndView.getModel();
+        try {
+            LoginInfo loginInfo = BtripSessionUtils.getLoginInfo();
+
+            Map<String, Object> hashMap = new HashMap<>();
+
+            hashMap.put(WorkFlowKeyWordConstants.CORP_ID, loginInfo.getCorpId());
+            hashMap.put(WorkFlowKeyWordConstants.USER_ID, loginInfo.getUserId());
+            hashMap.put(WorkFlowKeyWordConstants.LEVEL, 1);
+
+            ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(bizKey, hashMap);
+
+            System.out.println("流程定义的id:" + processInstance.getProcessInstanceId());
+            System.out.println("流程实例的id:" + processInstance.getId());
+            System.out.println("当前活动的id:" + processInstance.getActivityId());
+            System.out.println("当前流程的变量:" + processInstance.getProcessVariables());
+
+            model.put("response","流程开启");
+            modelAndView.setViewName("workflow");
+
+            return modelAndView;
         } catch (Exception e) {
             model.put("response", "出现异常，异常原因:" + e.getMessage());
             modelAndView.setViewName("workflow");

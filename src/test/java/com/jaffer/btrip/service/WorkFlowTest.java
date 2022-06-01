@@ -22,7 +22,7 @@ public class WorkFlowTest extends AbsTest{
     public void completeTaskByUserId() {
         String id = "a";
         String userId = "zhangsan";
-        BtripResult<Boolean> result = workFlowService.completeTaskByUserId(id, userId);
+        BtripResult<Boolean> result = workFlowService.completeTaskByUserId (id, userId);
         System.out.println(result);
     }
 
