@@ -11,6 +11,8 @@ public class LoginInfo {
 
     private String userName;
 
+    private Long deptId;
+
     private String phoneNumber;
 
     private String corpName;

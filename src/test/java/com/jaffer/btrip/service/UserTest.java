@@ -84,10 +84,10 @@ public class UserTest extends AbsTest{
         ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
         RepositoryService service = processEngine.getRepositoryService();
         Deployment deploy = service.createDeployment()
-                .addClasspathResource("bpmn/evection.bpmn")
-                .addClasspathResource("bpmn/evection.png")
-                .name("出差demo")
-                .key("evection")
+                .addClasspathResource("bpmn/evection2.bpmn")
+                .addClasspathResource("bpmn/evection2.png")
+                .name("出差demo2")
+                .key("evection2")
                 .deploy();
         System.out.println("部署id:" + deploy.getId());
         System.out.println("部署名称" + deploy.getName());
@@ -111,7 +111,7 @@ public class UserTest extends AbsTest{
         //创建一个审批单，将这个审批单的id挂到某个人身上
         ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
         RuntimeService runtimeService = processEngine.getRuntimeService();
-        String key = "evection";
+        String key = "evection2";
         Map<String, Object> hashMap = new HashMap<>();
         hashMap.put(WorkFlowKeyWordConstants.CORP_ID, "btrip31979f0b54204e64856d057054f9e1ce");
         hashMap.put(WorkFlowKeyWordConstants.USER_ID, "btripdba7660ecec94ac192671ba41ae2e0b4");
@@ -138,21 +138,20 @@ public class UserTest extends AbsTest{
         ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
         TaskService taskService = processEngine.getTaskService();
         List<Task> tasks = taskService.createTaskQuery()
-                .taskAssignee(corpId + "-" + userId)
+                .processInstanceId("a4332b3b-e54a-11ec-9fb3-7a99dd3cb10e")
                 .list();
         for (Task task : tasks) {
-            System.out.println(JSON.toJSONString(task.getProcessVariables()));
+            System.out.println("task id" + task.getId());
+            System.out.println("taks assignee:" + task.getAssignee());
         }
     }
 
     @Test
     public void complete() {
-        String corpId = "btrip31979f0b54204e64856d057054f9e1ce";
-        String userId = "btripf88c89a118294621a9e47af4586aaef6";
         ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
         TaskService taskService = processEngine.getTaskService();
         List<Task> tasks = taskService.createTaskQuery()
-                .taskAssignee(corpId + "-" + userId)
+                .taskAssignee("edf")
                 .list();
         for (Task task : tasks) {
             taskService.setVariable(task.getId(), WorkFlowKeyWordConstants.APPROVAL, 1);

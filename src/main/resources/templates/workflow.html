@@ -11,15 +11,16 @@
 </div>
 <br>
 
-<form action="/queryTask" method="post">
-  <p>流程实例id: <input type="text" name="processInstanceId"></p>
-  <button type="submit">查看流程task</button>
-</form>
-<br>
-
-<form action="/completeTask" method="post">
-  <p>流程实例id: <input type="text" name="processInstanceId"></p>
+<form action="/completeTaskByUserId" method="post">
+  <p>企业id: <input type="text" name="corpId"></p>
+  <p>用户id: <input type="text" name="userId"></p>
   <button type="submit">通过审批</button>
+</form>
+
+<form action="/refuseTaskByUserId" method="post">
+  <p>企业id: <input type="text" name="corpId"></p>
+  <p>用户id: <input type="text" name="userId"></p>
+  <button type="submit">拒绝审批</button>
 </form>
 
 <form action="/createTask" method="post">

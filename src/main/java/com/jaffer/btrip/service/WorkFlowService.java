@@ -5,9 +5,13 @@ import org.activiti.engine.task.Task;
 
 public interface WorkFlowService {
 
-    BtripResult<Boolean> completeTask(String processInstanceId);
+    BtripResult<Boolean> completeTaskByUserId(String corpId, String userId);
+
+    BtripResult<Boolean> completeTaskByTaskId(String taskId);
 
     BtripResult<Task> queryTask(String processInstanceId);
 
-    BtripResult<Boolean> completeTaskByUserId(String processInstanceId, String userId);
+    BtripResult<Boolean> refuseTaskByByUserId(String corpId, String userId);
+
+    BtripResult<Boolean> refuseTaskByTaskId(String taskId);
 }

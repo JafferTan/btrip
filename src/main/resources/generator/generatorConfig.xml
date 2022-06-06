@@ -35,7 +35,7 @@
         <sqlMapGenerator
                 targetPackage="mapper"
                 targetProject="../btrip/src/main/resources"/>
-        <!-- mybatis接口类配置 生成位置-->
+        <!-- mybatis接口类配置 生成位置--s s
 
         <javaClientGenerator
                 targetPackage="com.jaffer.btrip.mapper"
@@ -43,7 +43,7 @@
                 type="XMLMAPPER" />
 
         <!-- table name 可以添加多个table标签-->
-        <table tableName="btrip_dept"  domainObjectName="DeptPO" enableCountByExample="true"
+        <table tableName="btrip_trip_info"  domainObjectName="TripInfoPO" enableCountByExample="true"
                enableUpdateByExample="true" enableDeleteByExample="true"
                enableSelectByExample="true" selectByExampleQueryId="true" >
             <generatedKey column="id" identity="true" sqlStatement="Mysql"/>

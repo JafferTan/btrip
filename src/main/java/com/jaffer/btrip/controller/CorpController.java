@@ -73,6 +73,7 @@ public class CorpController {
             UserPO user = userDetailByPhoneNumber.getModule();
             loginInfo.setUserId(user.getUserId());
             loginInfo.setUserName(user.getUserName());
+            loginInfo.setDeptId(user.getDeptId());
             model.put("loginInfo", loginInfo);
             modelAndView.setViewName("index");
             return modelAndView;

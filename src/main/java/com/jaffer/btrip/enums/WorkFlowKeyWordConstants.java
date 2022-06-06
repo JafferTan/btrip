@@ -12,4 +12,6 @@ public class WorkFlowKeyWordConstants {
 
     public static final String LEADER_ID = "leaderId";
 
+    public static final String FORM_DATA_JSON = "formDataJSON";
+
 }
